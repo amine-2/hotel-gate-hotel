@@ -2,13 +2,15 @@ import { useState, useEffect } from "react";
 import BarChart from "../../Charts/BarChart";
 import FilterDropdown from "../../FilterDropdown";
 import { useFilteredData } from "../../../hooks/useFilteredData";
-import { getOccupancyByHotelData } from "../../../lib/statistics/occupancyByHotelData";
+import { getOccupancyData } from "../../../lib/statistics/occupancyData";
+import { useHotel } from "../../../auth/HotelContext";
 import LazyRender from "../../../hooks/LazyRender";
 import { useTranslation } from "react-i18next";
 
-export default function OccupancyByHotel() {
+export default function HotelOccupancy() {
 
   const { t } = useTranslation(["common", "dashboard"]);
+  const { hotelId } = useHotel();
   
 
   const filterOptions = [
@@ -27,7 +29,7 @@ export default function OccupancyByHotel() {
   // ✅ Fetch async data HERE
   useEffect(() => {
     async function fetchData() {
-      const res = await getOccupancyByHotelData();
+      const res = await getOccupancyData(hotelId);
       setData(res || []);
     }
      const isDark = localStorage.getItem("theme") === "dark";
@@ -66,7 +68,7 @@ export default function OccupancyByHotel() {
 
       {series.length > 0 && (
         <BarChart
-          title={t("occupancyByHotel", { ns: "dashboard" })}
+          title={t("hotelOccupancy", { ns: "dashboard" })}
           xLabels={xLabels}
           series={series}
           colorPalette={darkMode ? colorsDark : colorsLight}

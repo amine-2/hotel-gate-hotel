@@ -1,6 +1,6 @@
 
-import RevenueByHotel from "./RevenueByHotel"
-import OccupancyByHotel from "./OccupancyByHotel"
+import HotelRevenue from "./HotelRevenue"
+import HotelOccupancy from "./HotelOccupancy"
 import RevenueByChannel from "./RevenueByChanel"
 import PaymentSource from "./PaymentBySource"
 import Reveal from "../../../hooks/Reveal"
@@ -16,10 +16,10 @@ const RevenueChartsSection = () => {
         <div className="flex flex-wrap w-full justify-center">
           
           <Reveal delay={0} className="w-1/2 min-w-110">
-           <RevenueByHotel/>
+           <HotelRevenue/>
            </Reveal>
            <Reveal delay={0.2} className="w-1/2 min-w-110">
-           <OccupancyByHotel/>
+           <HotelOccupancy/>
           </Reveal>
             <Reveal delay={0.4} className="w-1/2 min-w-110">
            <RevenueByChannel/>

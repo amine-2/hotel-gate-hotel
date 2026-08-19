@@ -2,25 +2,28 @@ import { useEffect, useState } from "react";
 import BarChart from "../../Charts/BarChart";
 import FilterDropdown from "../../FilterDropdown";
 import { useFilteredData } from "../../../hooks/useFilteredData";
-import { getRevenueByHotelData } from "../../../lib/statistics/revenueByhotelData";
+import { getHotelRevenue } from "../../../lib/statistics/hotelRevenue";
+import { useHotel } from "../../../auth/HotelContext";
 import LazyRender from "../../../hooks/LazyRender";
 import { useTranslation } from "react-i18next";
 
-export default function RevenueByHotel() {
+export default function HotelRevenue() {
   const { t } = useTranslation(["common", "dashboard"]);
   const [revenueData, setRevenueData] = useState([]);
   const [darkMode, setDarkMode] = useState(false);
 
+  const { hotelId } = useHotel();
+
   useEffect(() => {
     const fetchData = async () => {
-      const res = await getRevenueByHotelData();
+      const res = await getHotelRevenue(hotelId);
       setRevenueData(res);
     };
-     
+
     const isDark = localStorage.getItem("theme") === "dark";
-      setDarkMode(isDark);
+    setDarkMode(isDark);
     fetchData();
-  }, []);
+  }, [hotelId]);
 
   const filterOptions = [
     { label: t("last_7_days", { ns: "common" }), value: "week" },
@@ -36,7 +39,7 @@ export default function RevenueByHotel() {
     "revenue", // value to sum
     "week",
   );
-  
+
   const colorsLight = [
     "rgba(245, 135, 0, 0.7)",
     "rgba(38, 104, 103, 0.7)",
@@ -59,7 +62,7 @@ export default function RevenueByHotel() {
         options={filterOptions}
       />
       <BarChart
-        title={t("revenueByHotel", { ns: "dashboard" })}
+        title={t("hotelRevenue", { ns: "dashboard" })}
         xLabels={xLabels}
         series={series}
         colorPalette={darkMode ? colorsDark : colorsLight}

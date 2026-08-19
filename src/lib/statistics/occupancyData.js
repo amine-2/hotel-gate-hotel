@@ -33,7 +33,7 @@ function fillMissingDatesByHotel(data) {
           hotelId: hotelData[0].hotelId,
           hotelName: hotelData[0].hotelName,
           date: dateStr,
-          revenue: 0,
+          occupancy: 0,
         },
       );
     }
@@ -43,9 +43,11 @@ function fillMissingDatesByHotel(data) {
 }
 
 /**
- * Fetch revenue per hotel per day (with gap filling)
+ * Fetch occupancy per hotel per day (with gap filling)
  */
-export async function getRevenueByHotelData() {
+export async function getOccupancyData(hotelId) {
+
+
   const formatDate = (d) => {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, "0");
@@ -64,16 +66,17 @@ export async function getRevenueByHotelData() {
       `
       hotel_id,
       date,
-      total_revenue,
+      occupied_rooms,
       hotel_accounts (
         name
       )
     `,
     )
-    .gte("date",formatDate  (oneYearAgo))
-    .lte("date", formatDate (today))
+    .eq("hotel_id", hotelId)
+    .gte("date", formatDate(oneYearAgo))
+    .lte("date", formatDate(today))
     .order("date", { ascending: true });
-    
+
   if (error) {
     console.error("Error fetching revenue data:", error);
     return [];
@@ -84,7 +87,7 @@ export async function getRevenueByHotelData() {
     hotelId: row.hotel_id,
     hotelName: row.hotel_accounts?.name.en,
     date: row.date,
-    revenue: row.total_revenue,
+    occupancy: row.occupied_rooms,
   }));
 
   // fill missing days

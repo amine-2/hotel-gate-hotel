@@ -1,7 +1,8 @@
 
 import { useState, useMemo, useEffect } from "react";
 import SummeryCard from "../../SummeryCard";
-import { getGlobalStats } from "../../../lib/statistics/getGlobalStats";
+import {useHotel} from "../../../auth/HotelContext";
+import {getHotelStatsDaily} from "../../../lib/statistics/getHotelStatsDaily";
 import { useTranslation } from "react-i18next";
 
 const ranges = {
@@ -14,22 +15,23 @@ const ranges = {
 };
 
 export default function SummarySection() {
+  const { hotelId } = useHotel()
   const [range, setRange] = useState("today");
-  const [globalStatsDaily, setGlobalStatsDaily] = useState([]);
+  const [hotelStatsDaily, sethotelStatsDaily] = useState([]);
 
   const { t } = useTranslation([ "common", "dashboard" ]);
   // ✅ Fetch data on mount
   useEffect(() => {
     async function fetchData() {
-      const data = await getGlobalStats();
-      setGlobalStatsDaily(data || []);
+      const data = await getHotelStatsDaily(hotelId);
+      sethotelStatsDaily(data || [hottelId]);
     }
 
     fetchData();
   }, []);
 
   const summary = useMemo(() => {
-    if (!globalStatsDaily.length) {
+    if (!hotelStatsDaily.length) {
       return {
         revenue: 0,
         bookings: 0,
@@ -42,7 +44,7 @@ export default function SummarySection() {
 
     const days = ranges[range];
 
-    const sorted = [...globalStatsDaily].sort(
+    const sorted = [...hotelStatsDaily].sort(
       (a, b) => new Date(a.date) - new Date(b.date)
     );
 
@@ -74,11 +76,11 @@ export default function SummarySection() {
 
     const revenue = sum(current, "total_revenue");
     const bookings = sum(current, "total_bookings");
-    const guests = sum(current, "total_guests");
+    const guests = sum(current, "guests");
 
     const prevRevenue = sum(previous, "total_revenue");
     const prevBookings = sum(previous, "total_bookings");
-    const prevGuests = sum(previous, "total_guests");
+    const prevGuests = sum(previous, "guests");
 
     const growth = (current, prev) =>
       prev === 0 ? 100 : ((current - prev) / prev) * 100;
@@ -91,8 +93,9 @@ export default function SummarySection() {
       bookingsGrowth: growth(bookings, prevBookings),
       guestsGrowth: growth(guests, prevGuests),
     };
-  }, [range, globalStatsDaily]); 
+  }, [range, hotelStatsDaily]); 
 
+ 
   return (
     <div className="w-[90%] flex flex-col gap-12 pt-12 pbe-20 border-b border-zinc-300">
       {/* Header */}

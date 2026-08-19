@@ -7,8 +7,9 @@ export async function getHotelStatsDaily(hotelId) {
     .eq("hotel_id", hotelId)
     .order("date", { ascending: true });
 
+
   if (error) {
-    console.error("Error fetching hotel stats:", error.message);
+    console.error("Error fetching hotel stats:", error);
     return [];
   }
 

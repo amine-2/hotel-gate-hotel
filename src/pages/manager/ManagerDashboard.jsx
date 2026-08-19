@@ -1,7 +1,6 @@
 import { useAuth } from '../../auth/AuthContext'
 import SummarySection from '../../components/manager/Overview/SummerySection'
 import RevenueChartsSection from '../../components/manager/Overview/RevenueChartsSection'
-import OccupancyTableSection from '../../components/manager/Overview/OccupancyTableSection'
 import { useTranslation } from 'react-i18next'
 
 
@@ -25,7 +24,7 @@ export default function ManagerDashboard() {
 
       <SummarySection/>
       <RevenueChartsSection/>
-      <OccupancyTableSection/>
+      
 
     </div>
   )

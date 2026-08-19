@@ -1,0 +1,19 @@
+{
+  "today": "Today",
+  "days": "Days",
+  "month":"Month",
+  "months": "Months",
+  "year": "Year",
+  "search": "Search ...",
+  "all": "All",
+  "confirmed": "Confirmed",
+  "pending": "Pending",
+  "cancelled": "Cancelled",
+  "last_7_days": "Last 7 Days",
+  "last_30_days": "Last 30 Days",
+  "last_6_months": "Last 6 Months",
+  "last_year": "Last Year",
+  "exportAs": "Export as"
+  
+
+}

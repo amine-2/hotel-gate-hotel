@@ -1,0 +1,18 @@
+{
+  "welcome": "Welcome",
+  "overview": "Overview",
+  "summary": "Summary",
+  "revenueOccupancyTrends": "Revenue & Occupancy Trends",
+  "totalRevenue": "Total Revenue",
+  "totalGuests": "Total Guests",
+  "totalBookings": "Total Bookings",
+  "revenueByHotel": "Revenue By Hotel",
+  "occupancyByHotel": "Occupancy By Hotel",
+  "revenueByChannel": "Revenue By Channel",
+  "revenueDistribution": "Revenue Distribution",
+  "todaysOccupancy": "Today's Occupancy",
+  "hotel": "Hotel",
+  "roomsOccupied": "Rooms Occupied",
+  "available": "Available",
+  "rate": "Rate"
+}

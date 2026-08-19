@@ -1,0 +1,18 @@
+{
+  "welcome": "Bienvenue",
+  "overview": "Vue d’ensemble",
+  "summary": "Résumé",
+  "revenueOccupancyTrends": "Tendances des revenus et de l’occupation",
+  "totalRevenue": "Revenu total",
+  "totalGuests": "Nombre total de clients",
+  "totalBookings": "Nombre total de réservations",
+  "revenueByHotel": "Revenus par hôtel",
+  "occupancyByHotel": "Taux d'occupation par hôtel",
+  "revenueByChannel": "Revenus par canal",
+  "revenueDistribution": "Répartition des revenus",
+  "todaysOccupancy": "Occupation d'aujourd'hui",
+  "hotel": "Hôtel",
+  "roomsOccupied": "Chambres occupées",
+  "available": "Disponibles",
+  "rate": "Taux"
+}

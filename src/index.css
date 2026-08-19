@@ -1,0 +1,63 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  @apply bg-white text-zinc-900 dark:bg-zinc-900 dark:text-white;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body{
+  
+  overflow-x: hidden;
+}
+
+
+input:focus {
+  outline: none;
+}
+
+input:not(:focus) {
+  outline: none;
+}
+select:focus {
+  outline: none;
+
+}
+
+select:not(:focus) {
+  outline: none;
+}
+
+select {
+  cursor: pointer;
+}
+
+
+.btn {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+.btn:hover {
+  border-color: #646cff;
+}
+
+
+

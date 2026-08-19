@@ -1,0 +1,80 @@
+.loader-root {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Logo */
+.loader-logo {
+  width: 100px;
+  position: relative;
+  z-index: 2;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.loader-logo img {
+  width: 150%;
+  height: auto;
+  opacity: 1;
+  
+}
+
+/* Background animated lines */
+.loader-line {
+  position: absolute;
+  width: 300%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 100, 0, 0.6),
+    transparent
+  );
+
+  top: 50%;
+  
+  transform-origin: center;
+
+  animation:
+    spin var(--d) linear infinite,
+    drift var(--d) ease-in-out infinite alternate;
+  opacity: 0.5;
+}
+
+
+
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes drift {
+  from {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  to {
+    transform: translate(var(--x), var(--y)) rotate(var(--r));
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+

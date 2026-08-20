@@ -198,3 +198,33 @@ contextBridge.exposeInMainWorld(
     "electronUpdater",
     updater
 );
+
+/* =========================================================
+   IPC API
+   ========================================================= */
+const ipc = {
+    on: (channel, callback) => {
+        const listener = (_event, data) => {
+            callback(data);
+        };
+
+        ipcRenderer.on(channel, listener);
+
+        return () => {
+            ipcRenderer.removeListener(channel, listener);
+        };
+    },
+
+    send: (channel, data) => {
+        ipcRenderer.send(channel, data);
+    },
+
+    invoke: (channel, data) => {
+        return ipcRenderer.invoke(channel, data);
+    },
+};
+
+contextBridge.exposeInMainWorld(
+    "ipcRenderer",
+    ipc
+);

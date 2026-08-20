@@ -43,7 +43,7 @@ function fillMissingDatesByChannel(data) {
 /**
  * Fetch revenue by channel
  */
-export async function getRevenueByChannelData() {
+export async function getRevenueByChannelData(hotelId) {
 
   const formatDate = (d) => {
   const y = d.getFullYear();
@@ -57,14 +57,14 @@ export async function getRevenueByChannelData() {
   const oneYearAgo = new Date(today);
   oneYearAgo.setFullYear(today.getFullYear() - 1);
   const { data, error } = await supabase
-    .from("global_channel_stats_daily")
+    .from("hotel_channel_stats_daily")
     .select(
       `
       date,
       channel,
       total_revenue
     `,
-    )
+    ).eq("hotel_id", hotelId)
     .gte("date",formatDate  (oneYearAgo))
     .lte("date", formatDate (today))
     .order("date", { ascending: true });

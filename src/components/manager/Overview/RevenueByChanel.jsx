@@ -5,16 +5,19 @@ import { useFilteredData } from "../../../hooks/useFilteredData";
 import { getRevenueByChannelData } from "../../../lib/statistics/revenueByChannelData";
 import LazyRender from "../../../hooks/LazyRender";
 import { useTranslation } from "react-i18next";
+import { useHotel } from "../../../auth/HotelContext";
 
 export default function RevenueByChannel() {
   const [channelData, setChannelData] = useState([]);
   const { t } = useTranslation(["common", "dashboard"]);
   const [darkMode, setDarkMode] = useState(false);
 
+  const { hotelId } = useHotel();
+
   useEffect(() => {
     async function fetchData() {
-      const res = await getRevenueByChannelData();
-      setChannelData(res || []);
+      const res = await getRevenueByChannelData(hotelId);
+      setChannelData(res || [hotelId]);
 
       
     }

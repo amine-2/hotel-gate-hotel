@@ -6,6 +6,7 @@ import { useAggregatedData } from "../../../hooks/useAggregatedData";
 import { getRevenueByPaymentMethodData } from "../../../lib/statistics/revenueByPaymentSourceData";
 import LazyRender from "../../../hooks/LazyRender";
 import { useTranslation } from "react-i18next";
+import { useHotel } from "../../../auth/HotelContext" ;
 
 export default function PaymentSource() {
 
@@ -13,10 +14,12 @@ export default function PaymentSource() {
   const [paymentData, setPaymentData] = useState([]);
   const [darkMode, setDarkMode] = useState(false);
 
+  const { hotelId } = useHotel();
+
   useEffect(() => {
     async function fetchData() {
-      const res = await getRevenueByPaymentMethodData();
-      setPaymentData(res || []);
+      const res = await getRevenueByPaymentMethodData(hotelId);
+      setPaymentData(res || [hotelId]);
     }
 
     const isDark = localStorage.getItem("theme") === "dark";

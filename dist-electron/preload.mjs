@@ -136,3 +136,24 @@ electron.contextBridge.exposeInMainWorld(
   "electronUpdater",
   updater
 );
+const ipc = {
+  on: (channel, callback) => {
+    const listener = (_event, data) => {
+      callback(data);
+    };
+    electron.ipcRenderer.on(channel, listener);
+    return () => {
+      electron.ipcRenderer.removeListener(channel, listener);
+    };
+  },
+  send: (channel, data) => {
+    electron.ipcRenderer.send(channel, data);
+  },
+  invoke: (channel, data) => {
+    return electron.ipcRenderer.invoke(channel, data);
+  }
+};
+electron.contextBridge.exposeInMainWorld(
+  "ipcRenderer",
+  ipc
+);

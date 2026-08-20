@@ -8,7 +8,7 @@ const formatDate = (d) => {
   return `${y}-${m}-${day}`;
 };
 
-export async function getRevenueByPaymentMethodData() {
+export async function getRevenueByPaymentMethodData(hotelId) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -16,12 +16,13 @@ export async function getRevenueByPaymentMethodData() {
   oneYearAgo.setFullYear(today.getFullYear() - 1);
 
   const { data, error } = await supabase
-    .from("global_payment_stats_daily")
+    .from("hotel_payment_stats_daily")
     .select(`
       date,
       payment_method,
       total_revenue
     `)
+    .eq("hotel_id", hotelId)
     .gte("date", formatDate(oneYearAgo))
     .lte("date", formatDate(today))
     .order("date", { ascending: true });

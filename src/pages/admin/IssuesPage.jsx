@@ -7,7 +7,6 @@ import IssueDetailsModal from "../../components/IssueDetailsModal";
 import HotelFilter from "../../components/manager/Staff/ui/HotelFilter";
 
 import { getIssuesByHotel } from "../../lib/issues/getIssuesByHotel";
-import { getAllIssues } from "../../lib/issues/getAllIssues";
 import { updateIssue } from "../../lib/issues/updateIssue";
 import { deleteIssue } from "../../lib/issues/deleteIssue";
 
@@ -43,21 +42,13 @@ export default function IssuesPage() {
         try {
             let data;
 
-            if (hotelFilter === "all") {
-                data = await getAllIssues();
-            } else {
+            
                 data =
                     await getIssuesByHotel(
                         hotelFilter
                     );
-            }
+            
 
-            /*
-             * Website Manager can only see:
-             *
-             * website
-             * system
-             */
             const filteredIssues =
                 (data || []).filter((issue) =>
                     ALLOWED_CATEGORIES.includes(

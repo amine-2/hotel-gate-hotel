@@ -20,25 +20,43 @@ export async function addUser(form) {
       full_name,
       phone,
       role,
-      hotel_id,
       status,
       avatar,
       cv,
     } = form;
 
-    // 🔹 1. Create auth user
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+    // ==========================================
+    // 1. Create Auth user + profile
+    // ==========================================
+
+    const { data, error } = await supabase.functions.invoke(
+      "create-staff",
+      {
+        body: {
+          email,
+          password,
+          full_name,
+          phone,
+          role,
+          status,
+        },
+      }
+    );
 
     if (error) throw error;
 
-    const userId = data.user?.id;
+    if (!data?.success || !data?.userId) {
+      throw new Error(
+        data?.error || "Failed to create user"
+      );
+    }
 
-    if (!userId) throw new Error("User ID missing");
+    const userId = data.userId;
 
-    // 🔹 2. Upload avatar (SAFE NAME)
+    // ==========================================
+    // 2. Upload avatar
+    // ==========================================
+
     let avatar_url = null;
 
     if (avatar) {
@@ -55,7 +73,10 @@ export async function addUser(form) {
       avatar_url = uploadData.path;
     }
 
-    // 🔹 3. Upload CV (SAFE NAME)
+    // ==========================================
+    // 3. Upload CV
+    // ==========================================
+
     let cv_url = null;
 
     if (cv) {
@@ -72,27 +93,40 @@ export async function addUser(form) {
       cv_url = cvData.path;
     }
 
-    // 🔹 4. Insert profile
-    const { error: profileError } = await supabase
-      .from("profiles")
-      .insert({
-        id: userId,
-        full_name,
-        email,
-        phone,
-        role,
-        hotel_id: hotel_id || null,
-        status,
-        avatar_url,
-        cv_url,
-      });
+    // ==========================================
+    // 4. Update profile with file paths
+    // ==========================================
 
-    if (profileError) throw profileError;
+    if (avatar_url || cv_url) {
+      const updateData = {};
 
-    return { success: true };
+      if (avatar_url) {
+        updateData.avatar_url = avatar_url;
+      }
+
+      if (cv_url) {
+        updateData.cv_url = cv_url;
+      }
+
+      const { error: updateError } = await supabase
+        .from("profiles")
+        .update(updateData)
+        .eq("id", userId);
+
+      if (updateError) throw updateError;
+    }
+
+    return {
+      success: true,
+      userId,
+    };
 
   } catch (error) {
     console.error("addUser error:", error);
-    return { success: false, error };
+
+    return {
+      success: false,
+      error,
+    };
   }
 }

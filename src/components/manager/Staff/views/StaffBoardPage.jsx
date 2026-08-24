@@ -1,18 +1,21 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { getEmployees } from "../../../../lib/Users/getEmployees";
-import HotelFilter from "../ui/HotelFilter";
+import { getEmployees } from "../../../../lib/users/getEmployees";
 import StaffSearch from "../ui/StaffSearch";
 import RoleSection from "../ui/RoleSection";
 import EmployeeCard from "../ui/EmployeeCard";
+import {useHotel} from "../../../../auth/HotelContext";
 
-export default function StaffBoardPage({ hotelId = null }) {
+export default function StaffBoardPage() {
   const navigate = useNavigate();
 
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [selectedHotel, setSelectedHotel] = useState(hotelId || "all");
+
+
+
+  const {hotelId} = useHotel();
 
   // 🔄 Fetch employees
   useEffect(() => {
@@ -21,7 +24,7 @@ export default function StaffBoardPage({ hotelId = null }) {
 
   const fetchEmployees = async () => {
     setLoading(true);
-    const data = await getEmployees();
+    const data = await getEmployees(hotelId);
     setEmployees(data || []);
     setLoading(false);
   };
@@ -29,11 +32,6 @@ export default function StaffBoardPage({ hotelId = null }) {
   // 🔍 FILTERING
   const filteredEmployees = useMemo(() => {
     let result = [...employees];
-
-    // hotel filter
-    if (selectedHotel !== "all") {
-      result = result.filter((e) => e.hotel_id === selectedHotel);
-    }
 
     // search (name + id)
     if (search) {
@@ -47,7 +45,7 @@ export default function StaffBoardPage({ hotelId = null }) {
     }
 
     return result;
-  }, [employees, selectedHotel, search]);
+  }, [employees,hotelId,  search]);
 
   const groupedByRole = useMemo(() => {
     const groups = {};
@@ -69,7 +67,7 @@ export default function StaffBoardPage({ hotelId = null }) {
     <div className="p-14">
       <div className="flex flex-wrap gap-4 justify-between items-center mb-14 border-b border-gray-300 pb-7">
         <div className="flex gap-4 flex-wrap">
-          <HotelFilter value={selectedHotel} onChange={setSelectedHotel} />
+      
 
           <StaffSearch value={search} onChange={setSearch} />
         </div>

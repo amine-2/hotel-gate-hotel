@@ -67,6 +67,7 @@ export async function getOccupancyData(hotelId) {
       hotel_id,
       date,
       occupied_rooms,
+      guests,
       hotel_accounts (
         name
       )
@@ -88,6 +89,7 @@ export async function getOccupancyData(hotelId) {
     hotelName: row.hotel_accounts?.name.en,
     date: row.date,
     occupancy: row.occupied_rooms,
+    guests: row.guests,
   }));
 
   // fill missing days

@@ -14,6 +14,7 @@ import Hotel from './pages/manager/Hotel.jsx'
 import Staff from './pages/manager/Staff.jsx'
 import Settings from './pages/manager/Settings.jsx'
 import Issues from './pages/manager/Issues.jsx'
+import Bookings from './pages/manager/Bookings.jsx'
 
 import AdminLayout from './pages/admin/AdminLayout.jsx'
 import AdminDashboard from './pages/admin/AdminDashboard.jsx'
@@ -56,6 +57,7 @@ function App() {
       <Route path="/dashboard/manager" element={<ManagerLayout />}>
         <Route path="overview" element={<ManagerDashboard />} />
         <Route path="hotel/*" element={<Hotel />} />
+        <Route path="bookings" element={<Bookings />} />
         <Route path="staff/*" element={<Staff />} />
         <Route path="issues" element={<Issues />} />
         <Route path="settings" element={<Settings />} />

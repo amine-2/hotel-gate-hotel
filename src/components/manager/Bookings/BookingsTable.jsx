@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import ReusableTable from "../../../ReusableTable";
-import LazyRender from "../../../../hooks/LazyRender";
-import TableFilters from "../../../TableFilters";
-import { useTableFilters } from "../../../../hooks/useTableFilters";
-import { getHotelBookings } from "../../../../lib/bookings/getHotelBookings";
+import ReusableTable from "../../ReusableTable";
+import TableFilters from "../../TableFilters";
+import { useTableFilters } from "../../../hooks/useTableFilters";
+import { getHotelBookings } from "../../../lib/bookings/getHotelBookings";
+import {useHotel} from "../../../auth/HotelContext";
 
 const columns = [
   { key: "id", label: "ID" , minWidth: "260px"   },
@@ -17,9 +16,10 @@ const columns = [
   { key: "status", label: "Status", minWidth: "150px", expandable: false },
 ];
 
-export default function HotelBookingsTable() {
-  const { hotelId } = useParams();
+export default function BookingsTable() {
+  
   const [data, setData] = useState([]);
+  const {hotelId} = useHotel();
 
   useEffect(() => {
     async function fetchData() {

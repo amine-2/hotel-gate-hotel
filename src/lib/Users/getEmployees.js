@@ -9,7 +9,7 @@ const ROLE_ORDER = {
   hotel_website_admin: 5,
 };
 
-export async function getEmployees() {
+export async function getEmployees(hotelId) {
   // 1. fetch profiles
   const { data: profiles, error: profileError } = await supabase
     .from("profiles")
@@ -18,9 +18,9 @@ export async function getEmployees() {
       full_name,
       avatar_url,
       status,
-      hotel_id,
       role
-    `);
+    `)
+    .eq("hotel_id", hotelId);
 
   // 2. fetch roles
   const { data: roles, error: roleError } = await supabase

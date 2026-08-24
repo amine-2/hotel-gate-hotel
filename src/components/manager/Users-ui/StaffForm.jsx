@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { addUser } from "../../../lib/users/addUser";
+import { addUser } from "../../../lib/Users/addUser";
 
 import AuthFields from "./AuthFields";
 import PersonalFields from "./PersonalFields";
 import RoleFields from "./RoleFields";
 import UploadFields from "./UploadFields";
 
-export default function StaffForm({ defaultRole = "", onSuccess, hidden = false }) {
+export default function StaffForm({ defaultRole = "", onSuccess, hidden = false, hotel_id }) {
   const [form, setForm] = useState({
     full_name: "",
     email: "",

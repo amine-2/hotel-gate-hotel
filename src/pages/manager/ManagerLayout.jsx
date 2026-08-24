@@ -6,8 +6,9 @@ import {
   LayoutDashboard,
   Building2,
   Settings,
-  IdCardLanyard,
   TriangleAlert,
+  IdCardLanyard,
+  ListChecks,
 } from "lucide-react";
 
 export default function ManagerLayout() {
@@ -18,7 +19,9 @@ export default function ManagerLayout() {
       icon: LayoutDashboard,
       path: "/dashboard/manager/overview",
     },
-    { label: "hotel", icon: Building2, path: "/dashboard/manager/hotel" },
+    { label: "hotel", icon: Building2, path: "/dashboard/manager/hotel" },     
+    { label: "bookings", icon: ListChecks, path: "/dashboard/manager/bookings" },     
+
     { label: "staff", icon: IdCardLanyard, path: "/dashboard/manager/staff" },
     { label: "issues", icon: TriangleAlert, path: "/dashboard/manager/issues" },
     { label: "settings", icon: Settings, path: "/dashboard/manager/settings" },

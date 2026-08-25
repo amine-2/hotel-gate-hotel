@@ -23,6 +23,10 @@ import SettingsPage from './pages/admin/SettingsPage.jsx'
 
 import HrLayout from './pages/hr/HrLayout.jsx'
 import HrDashboard from './pages/hr/HrDashboard.jsx'
+import HrIssues from './pages/hr/HrIssues.jsx'
+import HrSettings from './pages/hr/HrSettings.jsx'
+import Candidates from './pages/hr/Candidates.jsx'
+import HrStaff from './pages/hr/HrStaff.jsx'
 
 import ReceptionLayout from './pages/reception/ReceptionLayout.jsx'
 import ReceptionDashboard from './pages/reception/ReceptionDashboard.jsx'
@@ -68,9 +72,15 @@ function App() {
         <Route path="issues" element={<IssuesPage />} />
         <Route path="settings" element={<SettingsPage />} />
       </Route>
+
       <Route path="/dashboard/hr" element={<HrLayout />}>
         <Route path="overview" element={<HrDashboard />} />
+        <Route path="issues" element={<HrIssues />} />
+        <Route path="settings" element={<HrSettings />} />
+        <Route path="candidates" element={<Candidates />} />
+        <Route path="staff" element={<HrStaff />} />
       </Route>
+      
       <Route path="/dashboard/reception" element={<ReceptionLayout />}>
         <Route path="overview" element={<ReceptionDashboard />} />
       </Route>

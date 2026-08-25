@@ -4,8 +4,7 @@ import Navbar from "../../components/Navbar";
 import { Toaster } from "sonner";
 import {
   LayoutDashboard,
-  Building2,
-  UserRoundCog,
+  Users,
   Settings,
   IdCardLanyard,
   TriangleAlert,
@@ -19,8 +18,8 @@ export default function HrLayout() {
       icon: LayoutDashboard,
       path: "/dashboard/hr/overview",
     },
-    { label: "hotel", icon: Building2, path: "/dashboard/hr/hotel" },
     { label: "staff", icon: IdCardLanyard, path: "/dashboard/hr/staff" },
+    { label: "Candidates", icon: Users, path: "/dashboard/hr/candidates" },
     { label: "issues", icon: TriangleAlert, path: "/dashboard/hr/issues" },
     { label: "settings", icon: Settings, path: "/dashboard/hr/settings" },
   ];

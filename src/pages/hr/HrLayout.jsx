@@ -19,7 +19,7 @@ export default function HrLayout() {
       path: "/dashboard/hr/overview",
     },
     { label: "staff", icon: IdCardLanyard, path: "/dashboard/hr/staff" },
-    { label: "Candidates", icon: Users, path: "/dashboard/hr/candidates" },
+    { label: "candidates", icon: Users, path: "/dashboard/hr/candidates" },
     { label: "issues", icon: TriangleAlert, path: "/dashboard/hr/issues" },
     { label: "settings", icon: Settings, path: "/dashboard/hr/settings" },
   ];

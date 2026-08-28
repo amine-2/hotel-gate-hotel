@@ -78,7 +78,7 @@ function App() {
         <Route path="issues" element={<HrIssues />} />
         <Route path="settings" element={<HrSettings />} />
         <Route path="candidates" element={<Candidates />} />
-        <Route path="staff" element={<HrStaff />} />
+        <Route path="staff/*" element={<HrStaff />} />
       </Route>
       
       <Route path="/dashboard/reception" element={<ReceptionLayout />}>

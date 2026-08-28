@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
-import { getRoles } from "../../lib/Users/getRoles";
-import AddRoleModal from "./../manager/Users-ui/AddRoleModal";
+import { getRoles } from "../../../../lib/Users/getRoles";
+import AddRoleModal from "../../Users-ui/AddRoleModal";
 
 const EXCLUDED_ROLES = [
   "owner",
   "hr",
   "website_admin",
+  "hotel_manager",
 ];
 
 export default function EmployeeHeader({ data, editing, onChange }) {

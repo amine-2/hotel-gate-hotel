@@ -1,9 +1,19 @@
-import React from 'react'
+import StaffBoardPage from "../../components/hr/Staff/views/StaffBoardPage";
+import AddStaff from "../../components/hr/Staff/views/AddStaff";
+import StaffView from "../../components/hr/Staff/views/StaffView";
+import { Routes, Route } from "react-router-dom";
 
-const HrStaff = () => {
+export default function HrStaff() {
   return (
-    <div>HrStaff</div>
-  )
-}
+    <Routes>
+      {/* LIST */}
+      <Route index element={<StaffBoardPage />} />
 
-export default HrStaff
+      {/* ADD */}
+      <Route path="add" element={<AddStaff />} />
+
+      {/* VIEW */}
+      <Route path=":employeeId" element={<StaffView />} />
+    </Routes>
+  );
+}

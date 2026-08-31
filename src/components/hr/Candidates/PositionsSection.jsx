@@ -9,6 +9,7 @@ import AddPositionModal from "./AddPositionModal";
 import EditPositionModal from "./EditPositionModal";
 import DeletePositionModal from "./DeletePositionModal";
 
+
 export default function PositionsSection({ onSelectPosition }) {
   const { hotelId } = useHotel();
 
@@ -26,8 +27,9 @@ export default function PositionsSection({ onSelectPosition }) {
   return (
     <>
       {/* HEADER */}
-      <div className="flex items-center justify-between">
-        <div>
+      <div className="flex items-start justify-between mb-10
+      ">
+        <div className="flex flex-col gap-10">
           <h1 className="text-2xl font-semibold">
             Candidates
           </h1>

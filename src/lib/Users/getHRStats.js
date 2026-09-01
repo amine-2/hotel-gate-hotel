@@ -13,6 +13,7 @@ export async function getHRStats(hotelId) {
     };
   }
 
+  // Get staff
   const { data, error } = await supabase
     .from("profiles")
     .select("status, on_leave")
@@ -32,6 +33,28 @@ export async function getHRStats(hotelId) {
     };
   }
 
+  // Get active candidates
+  const { count: candidates, error: candidatesError } =
+    await supabase
+      .from("job_applications")
+      .select("id", { count: "exact", head: true })
+      .eq("hotel_id", hotelId)
+      .not("status", "in", '("accepted","rejected")');
+
+  if (candidatesError) {
+    console.error("getHRStats candidates:", candidatesError);
+
+    return {
+      data: {
+        totalStaff: 0,
+        active: 0,
+        onLeave: 0,
+        candidates: 0,
+      },
+      error: candidatesError,
+    };
+  }
+
   const totalStaff = data.length;
 
   const active = data.filter(
@@ -47,7 +70,7 @@ export async function getHRStats(hotelId) {
       totalStaff,
       active,
       onLeave,
-      candidates: 0,
+      candidates: candidates || 0,
     },
     error: null,
   };

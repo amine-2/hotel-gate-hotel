@@ -6,7 +6,7 @@ import IssuesList from "../../components/IssuesList";
 import IssueDetailsModal from "../../components/IssueDetailsModal";
 import { useHotel } from "../../auth/HotelContext";
 
-import { getIssuesByHotel } from "../../lib/issues/getIssuesByHotel";
+import { getIssuesByHotelNull } from "../../lib/issues/getIssuesByHotelNull";
 import { updateIssue } from "../../lib/issues/updateIssue";
 import { deleteIssue } from "../../lib/issues/deleteIssue";
 
@@ -30,7 +30,7 @@ export default function Issues() {
   const fetchIssues = async () => {
     setLoading(true);
 
-    const data = await getIssuesByHotel(hotelId);
+    const data = await getIssuesByHotelNull(hotelId);
 
     setIssues(data || []);
     setLoading(false);

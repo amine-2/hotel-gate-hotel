@@ -1,6 +1,6 @@
 import { supabase } from "../supabase";
 
-export async function getIssuesByHotel(hotelId) {
+export async function getIssuesByHotelNull(hotelId) {
   const { data, error } = await supabase
     .from("issues")
     .select(`
@@ -9,7 +9,7 @@ export async function getIssuesByHotel(hotelId) {
       creator:profiles!issues_created_by_fkey ( id, full_name ),
       updater:profiles!issues_updated_by_fkey ( id, full_name )
     `)
-    .eq("hotel_id", hotelId)
+    .or(`hotel_id.eq.${hotelId},hotel_id.is.null`)
     .order("created_at", { ascending: false });
 
   if (error) {

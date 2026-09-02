@@ -17,7 +17,7 @@ import Issues from './pages/manager/Issues.jsx'
 import Bookings from './pages/manager/Bookings.jsx'
 
 import AdminLayout from './pages/admin/AdminLayout.jsx'
-import AdminDashboard from './pages/admin/AdminDashboard.jsx'
+import HotelPage from './pages/admin/HotelPage.jsx'
 import IssuesPage from './pages/admin/IssuesPage.jsx'
 import SettingsPage from './pages/admin/SettingsPage.jsx'
 
@@ -68,7 +68,7 @@ function App() {
       </Route> 
       
       <Route path="/dashboard/admin" element={<AdminLayout />}>
-        <Route path="overview" element={<AdminDashboard />} />
+        <Route path="hotel" element={<HotelPage />} />
         <Route path="issues" element={<IssuesPage />} />
         <Route path="settings" element={<SettingsPage />} />
       </Route>

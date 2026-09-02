@@ -6,15 +6,16 @@ import {
   LayoutDashboard,
   Settings,
   TriangleAlert,
+  Building2,
 } from "lucide-react";
 
 export default function AdminLayout() {
   const websiteManagerLinks = [
     {
-      label: "overview",
+      label: "hotel",
       exact: true,
-      icon: LayoutDashboard,
-      path: "/dashboard/admin/overview",
+      icon: Building2,
+      path: "/dashboard/admin/hotel",
     },
     {
       label: "issues",

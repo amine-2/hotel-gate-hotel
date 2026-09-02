@@ -17,7 +17,7 @@ export default function Login() {
         else if (profile.role === 'hotel_manager')
           navigate('/dashboard/manager/overview')
         else if (profile.role === 'hotel_admin')
-          navigate('/dashboard/admin/overview') 
+          navigate('/dashboard/admin/hotel') 
         else if (profile.role === 'receptionist')
           navigate('/dashboard/reception/overview')
         

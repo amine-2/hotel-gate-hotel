@@ -20,6 +20,7 @@ import AdminLayout from './pages/admin/AdminLayout.jsx'
 import HotelPage from './pages/admin/HotelPage.jsx'
 import IssuesPage from './pages/admin/IssuesPage.jsx'
 import SettingsPage from './pages/admin/SettingsPage.jsx'
+import FloorsPage from './pages/admin/FloorsPage.jsx'
 
 import HrLayout from './pages/hr/HrLayout.jsx'
 import HrDashboard from './pages/hr/HrDashboard.jsx'
@@ -71,6 +72,7 @@ function App() {
         <Route path="hotel" element={<HotelPage />} />
         <Route path="issues" element={<IssuesPage />} />
         <Route path="settings" element={<SettingsPage />} />
+        <Route path="floors" element={<FloorsPage />} />
       </Route>
 
       <Route path="/dashboard/hr" element={<HrLayout />}>

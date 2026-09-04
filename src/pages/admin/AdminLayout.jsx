@@ -3,10 +3,11 @@ import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import { Toaster } from "sonner";
 import {
-  LayoutDashboard,
+
   Settings,
   TriangleAlert,
   Building2,
+  Building
 } from "lucide-react";
 
 export default function AdminLayout() {
@@ -16,6 +17,11 @@ export default function AdminLayout() {
       exact: true,
       icon: Building2,
       path: "/dashboard/admin/hotel",
+    },
+    {
+      label: "floors",
+      icon: Building,
+      path: "/dashboard/admin/floors",
     },
     {
       label: "issues",

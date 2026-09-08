@@ -21,6 +21,7 @@ import HotelPage from './pages/admin/HotelPage.jsx'
 import IssuesPage from './pages/admin/IssuesPage.jsx'
 import SettingsPage from './pages/admin/SettingsPage.jsx'
 import FloorsPage from './pages/admin/FloorsPage.jsx'
+import RoomsPage from './pages/admin/RoomsPage.jsx'
 
 import HrLayout from './pages/hr/HrLayout.jsx'
 import HrDashboard from './pages/hr/HrDashboard.jsx'
@@ -73,6 +74,7 @@ function App() {
         <Route path="issues" element={<IssuesPage />} />
         <Route path="settings" element={<SettingsPage />} />
         <Route path="floors" element={<FloorsPage />} />
+        <Route path="rooms" element={<RoomsPage />} />
       </Route>
 
       <Route path="/dashboard/hr" element={<HrLayout />}>

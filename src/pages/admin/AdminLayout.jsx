@@ -7,7 +7,8 @@ import {
   Settings,
   TriangleAlert,
   Building2,
-  Building
+  Building,
+  BedSingle
 } from "lucide-react";
 
 export default function AdminLayout() {
@@ -22,6 +23,11 @@ export default function AdminLayout() {
       label: "floors",
       icon: Building,
       path: "/dashboard/admin/floors",
+    },
+    {
+      label: "rooms",
+      icon: BedSingle,
+      path: "/dashboard/admin/rooms",
     },
     {
       label: "issues",

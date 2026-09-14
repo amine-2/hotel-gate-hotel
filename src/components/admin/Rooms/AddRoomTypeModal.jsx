@@ -3,6 +3,10 @@ import { createRoomType } from "../../../lib/rooms/createRoomType";
 import RoomTypeImagesManager from "./RoomTypeImagesManager";
 import { uploadRoomTypeImage } from "../../../lib/rooms/uploadRoomTypeImage";
 import { updateRoomTypeImages } from "../../../lib/rooms/updateRoomTypeImages";
+import TextField from "./TextField";
+import TextAreaField from "./TextAreaField";
+import NumberField from "./NumberField";
+import { useTranslation } from "react-i18next";
 
 export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
   const [nameEn, setNameEn] = useState("");
@@ -286,7 +290,7 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
 
   return (
     <div
-      className="fixed inset-0 z-100 flex items-center justify-center bg-black/40 p-4"
+      className="fixed inset-0 z-100 flex items-center justify-center bg-black/40 p-4 dark:bg-zinc-900/40"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) {
           onClose();
@@ -294,14 +298,14 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
       }}
     >
       <div
-        className="relative z-101 max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-6 shadow-xl"
+        className="relative z-101 max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-6 shadow-xl dark:bg-zinc-800 dark:text-white"
         onMouseDown={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="mb-6">
           <h2 className="text-lg font-semibold">Create Room Type</h2>
 
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Create a room type that can later be assigned to physical rooms.
           </p>
         </div>
@@ -313,7 +317,7 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
             <h3 className="mb-3 text-sm font-medium">Room Name</h3>
 
             <div className="space-y-3">
-              <Input
+              <TextField
                 label="English"
                 value={nameEn}
                 onChange={setNameEn}
@@ -321,7 +325,7 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
                 disabled={saving}
               />
 
-              <Input
+              <TextField
                 label="French"
                 value={nameFr}
                 onChange={setNameFr}
@@ -329,7 +333,7 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
                 disabled={saving}
               />
 
-              <Input
+              <TextField
                 label="Arabic"
                 value={nameAr}
                 onChange={setNameAr}
@@ -345,7 +349,7 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
             <h3 className="mb-3 text-sm font-medium">Description</h3>
 
             <div className="space-y-3">
-              <Textarea
+              <TextAreaField
                 label="English"
                 value={descriptionEn}
                 onChange={setDescriptionEn}
@@ -353,7 +357,7 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
                 disabled={saving}
               />
 
-              <Textarea
+              <TextAreaField
                 label="French"
                 value={descriptionFr}
                 onChange={setDescriptionFr}
@@ -361,7 +365,7 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
                 disabled={saving}
               />
 
-              <Textarea
+              <TextAreaField
                 label="Arabic"
                 value={descriptionAr}
                 onChange={setDescriptionAr}
@@ -377,17 +381,17 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
             <h3 className="mb-3 text-sm font-medium">Room Information</h3>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <NumberInput
+              <NumberField
                 label="Price / Night"
                 value={price}
                 onChange={setPrice}
                 placeholder="150"
                 disabled={saving}
                 min="0"
-                step="0.01"
+                step="1000"
               />
 
-              <NumberInput
+              <NumberField
                 label="Capacity"
                 value={capacity}
                 onChange={setCapacity}
@@ -397,14 +401,14 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
                 step="1"
               />
 
-              <NumberInput
+              <NumberField
                 label="Size (m²)"
                 value={size}
                 onChange={setSize}
                 placeholder="25"
                 disabled={saving}
                 min="0"
-                step="0.1"
+                step="5"
               />
             </div>
           </section>
@@ -431,7 +435,7 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
                     value={bed.type}
                     onChange={(e) => updateBed(index, "type", e.target.value)}
                     disabled={saving}
-                    className="flex-1 rounded-lg border px-3 py-2 text-sm outline-none focus:border-black focus:ring-2"
+                    className="flex-1 rounded-lg border px-3 py-2 text-sm outline-none focus:border-black focus:ring-2 dark:bg-zinc-800 dark:text-zinc-300"
                   >
                     <option value="single">Single Bed</option>
 
@@ -454,7 +458,7 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
                       updateBed(index, "quantity", e.target.value)
                     }
                     disabled={saving}
-                    className="w-20 rounded-lg border px-3 py-2 text-sm outline-none focus:border-black focus:ring-2"
+                    className="w-20 rounded-lg border px-3 py-2 text-sm outline-none focus:border-black focus:ring-2 dark:bg-zinc-800 dark:text-zinc-300"
                   />
 
                   {beds.length > 1 && (
@@ -462,7 +466,7 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
                       type="button"
                       onClick={() => removeBed(index)}
                       disabled={saving}
-                      className="rounded-lg border px-3 text-lg text-gray-400 hover:border-red-200 hover:text-red-500"
+                      className="rounded-lg border px-3 text-lg text-gray-400 hover:border-red-200 hover:text-red-500 dark:border-zinc-600 dark:text-zinc-400 dark:hover:border-zinc-500 dark:hover:text-zinc-300"
                     >
                       ×
                     </button>
@@ -486,10 +490,10 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
                     type="button"
                     onClick={() => toggleAmenity(amenity)}
                     disabled={saving}
-                    className={`rounded-lg border px-3 py-2 text-sm transition ${
+                    className={`rounded-lg border px-3 py-2 text-sm dark:border-zinc-600 transition ${
                       selected
-                        ? "border-black bg-black text-white"
-                        : "hover:bg-gray-50"
+                        ? "border-black bg-black text-white dark:bg-orange-400 dark:text-white"
+                        : "hover:bg-gray-50 dark:hover:bg-zinc-700/50 dark:hover:text-zinc-300"
                     }`}
                   >
                     {amenity}
@@ -517,7 +521,7 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
               </label>
 
               <div className="max-w-xs">
-                <NumberInput
+                <NumberField
                   label="Discount (%)"
                   value={discount}
                   onChange={setDiscount}
@@ -525,7 +529,7 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
                   disabled={saving}
                   min="0"
                   max="100"
-                  step="0.1"
+                  step="5"
                 />
               </div>
             </div>
@@ -533,7 +537,7 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
 
           {/* Error */}
           {error && (
-            <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-600">
+            <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-600 dark:border-red-400 dark:bg-red-900 dark:text-red-400">
               {error}
             </div>
           )}
@@ -544,7 +548,7 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
               type="button"
               onClick={onClose}
               disabled={saving}
-              className="rounded-lg border px-4 py-2 text-sm hover:bg-gray-50"
+              className="rounded-lg border px-4 py-2 text-sm hover:bg-gray-50 dark:border-zinc-600 dark:hover:bg-zinc-700/50 dark:hover:text-zinc-300"
             >
               Cancel
             </button>
@@ -553,7 +557,7 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
               type="button"
               onClick={handleSubmit}
               disabled={saving}
-              className="rounded-lg bg-black px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50"
+              className="rounded-lg bg-black px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50 dark:bg-orange-400 dark:hover:bg-orange-500"
             >
               {saving ? "Creating..." : "Create Room Type"}
             </button>
@@ -564,67 +568,8 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
   );
 }
 
-function Input({ label, value, onChange, placeholder, disabled, dir }) {
-  return (
-    <div>
-      <label className="mb-1 block text-xs text-gray-500">{label}</label>
 
-      <input
-        type="text"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        disabled={disabled}
-        dir={dir}
-        className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:border-black focus:ring-2"
-      />
-    </div>
-  );
-}
 
-function Textarea({ label, value, onChange, placeholder, disabled, dir }) {
-  return (
-    <div>
-      <label className="mb-1 block text-xs text-gray-500">{label}</label>
 
-      <textarea
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        disabled={disabled}
-        dir={dir}
-        rows={3}
-        className="w-full resize-none rounded-lg border px-3 py-2 text-sm outline-none focus:border-black focus:ring-2"
-      />
-    </div>
-  );
-}
 
-function NumberInput({
-  label,
-  value,
-  onChange,
-  placeholder,
-  disabled,
-  min,
-  max,
-  step,
-}) {
-  return (
-    <div>
-      <label className="mb-1 block text-xs text-gray-500">{label}</label>
 
-      <input
-        type="number"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        disabled={disabled}
-        min={min}
-        max={max}
-        step={step}
-        className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:border-black focus:ring-2"
-      />
-    </div>
-  );
-}

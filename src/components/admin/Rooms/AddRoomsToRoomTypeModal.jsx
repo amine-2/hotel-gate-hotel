@@ -120,7 +120,7 @@ export default function AddRoomsToRoomTypeModal({
 
   return (
     <div
-      className="fixed inset-0 z-110 flex items-center justify-center bg-black/40 p-4"
+      className="fixed inset-0 z-110 flex items-center justify-center bg-black/40 p-4 dark:bg-zinc-900/50"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) {
           onClose();
@@ -128,20 +128,20 @@ export default function AddRoomsToRoomTypeModal({
       }}
     >
       <div
-        className="relative z-111 flex max-h-[80vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl bg-white shadow-xl"
+        className="relative z-111 flex max-h-[80vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl bg-white shadow-xl dark:bg-zinc-800"
         onMouseDown={(event) =>
           event.stopPropagation()
         }
       >
         {/* Header */}
 
-        <div className="flex items-center justify-between border-b px-6 py-5">
+        <div className="flex items-center justify-between border-b px-6 py-5 dark:border-zinc-600">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
               Add Rooms
             </h2>
 
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
               Select physical rooms to assign to
               this room type.
             </p>
@@ -151,7 +151,7 @@ export default function AddRoomsToRoomTypeModal({
             type="button"
             onClick={onClose}
             disabled={saving}
-            className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 disabled:opacity-50"
+            className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 disabled:opacity-50 dark:text-gray-400 dark:hover:bg-zinc-700 dark:hover:text-white"
           >
             <X size={20} />
           </button>
@@ -159,11 +159,11 @@ export default function AddRoomsToRoomTypeModal({
 
         {/* Toolbar */}
 
-        <div className="space-y-3 border-b px-6 py-4">
+        <div className="space-y-3 border-b px-6 py-4 dark:border-zinc-600">
           <div className="relative">
             <Search
               size={17}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-300 "
             />
 
             <input
@@ -174,12 +174,12 @@ export default function AddRoomsToRoomTypeModal({
               }
               placeholder="Search room number or floor..."
               disabled={saving}
-              className="w-full rounded-lg border border-gray-200 py-2.5 pl-9 pr-3 text-sm outline-none focus:border-gray-400"
+              className="w-full rounded-lg border border-gray-200 py-2.5 pl-9 pr-3 text-sm outline-none focus:border-gray-400 dark:bg-zinc-800 dark:text-zinc-300"
             />
           </div>
 
           <div className="flex items-center justify-between">
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
               {selectedIds.length} selected ·{" "}
               {filteredRooms.length} available
             </p>
@@ -192,7 +192,7 @@ export default function AddRoomsToRoomTypeModal({
                   saving ||
                   filteredRooms.length === 0
                 }
-                className="text-xs font-medium text-gray-700 hover:underline disabled:opacity-40"
+                className="text-xs font-medium text-gray-700 hover:underline disabled:opacity-40 dark:text-gray-300"
               >
                 Select all
               </button>
@@ -204,7 +204,7 @@ export default function AddRoomsToRoomTypeModal({
                   saving ||
                   selectedIds.length === 0
                 }
-                className="text-xs font-medium text-gray-500 hover:underline disabled:opacity-40"
+                className=" text-xs font-medium text-gray-700 hover:underline disabled:opacity-40 dark:text-gray-300"
               >
                 Clear
               </button>
@@ -215,7 +215,7 @@ export default function AddRoomsToRoomTypeModal({
         {/* Error */}
 
         {error && (
-          <div className="mx-6 mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+          <div className="mx-6 mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600 dark:border-red-600 dark:bg-zinc-800">
             {error}
           </div>
         )}
@@ -225,20 +225,20 @@ export default function AddRoomsToRoomTypeModal({
         <div className="min-h-0 flex-1 overflow-y-auto p-6">
           {loading ? (
             <div className="flex min-h-60 items-center justify-center">
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 Loading available rooms...
               </p>
             </div>
           ) : filteredRooms.length === 0 ? (
-            <div className="flex min-h-60 items-center justify-center rounded-xl border border-dashed border-gray-300">
+            <div className="flex min-h-60 items-center justify-center rounded-xl border border-dashed border-gray-300 dark:border-gray-700">
               <div className="text-center">
-                <p className="text-sm font-medium text-gray-700">
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   {rooms.length === 0
                     ? "No unassigned rooms"
                     : "No rooms found"}
                 </p>
 
-                <p className="mt-1 text-xs text-gray-400">
+                <p className="mt-1 text-xs text-gray-400 dark:text-gray-300">
                   {rooms.length === 0
                     ? "Create physical rooms from the Floors page first."
                     : "Try a different search."}
@@ -261,8 +261,8 @@ export default function AddRoomsToRoomTypeModal({
                     disabled={saving}
                     className={`rounded-xl border p-3 text-left transition ${
                       selected
-                        ? "border-gray-900 bg-gray-900 text-white"
-                        : "border-gray-200 bg-white hover:bg-gray-50"
+                        ? "border-gray-900 bg-gray-900 text-white dark:border-white dark:bg-orange-400 dark:text-white"
+                        : "border-gray-200 bg-white hover:bg-gray-50 dark:border-zinc-700 dark:bg-zinc-700 dark:hover:bg-zinc-700"
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -273,7 +273,7 @@ export default function AddRoomsToRoomTypeModal({
                       <span
                         className={`flex h-4 w-4 items-center justify-center rounded border text-[10px] ${
                           selected
-                            ? "border-white bg-white text-gray-900"
+                            ? "border-white bg-white text-gray-900 "
                             : "border-gray-300"
                         }`}
                       >
@@ -286,8 +286,8 @@ export default function AddRoomsToRoomTypeModal({
                         <p
                           className={`mt-1 text-xs ${
                             selected
-                              ? "text-gray-300"
-                              : "text-gray-500"
+                              ? "text-gray-300 dark:text-gray-100"
+                              : "text-gray-500 dark:text-gray-400"
                           }`}
                         >
                           Floor {room.floor}
@@ -303,7 +303,7 @@ export default function AddRoomsToRoomTypeModal({
         {/* Footer */}
 
         <div className="flex items-center justify-between border-t px-6 py-4">
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-gray-500 dark:text-gray-400">
             {selectedIds.length > 0
               ? `${selectedIds.length} ${
                   selectedIds.length === 1
@@ -318,7 +318,9 @@ export default function AddRoomsToRoomTypeModal({
               type="button"
               onClick={onClose}
               disabled={saving}
-              className="rounded-lg border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+              className="rounded-lg border border-gray-200 px-4 py-2.5 text-sm font-medium 
+              text-gray-700 hover:bg-gray-50 disabled:opacity-50 dark:border-zinc-700 
+              dark:text-zinc-300 dark:hover:bg-zinc-700"
             >
               Cancel
             </button>
@@ -330,7 +332,7 @@ export default function AddRoomsToRoomTypeModal({
                 saving ||
                 selectedIds.length === 0
               }
-              className="rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-orange-400 dark:hover:bg-orange-500"
             >
               {saving
                 ? "Adding..."

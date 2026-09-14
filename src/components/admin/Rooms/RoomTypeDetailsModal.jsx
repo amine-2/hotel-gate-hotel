@@ -1,4 +1,5 @@
 import { X } from "lucide-react";
+import InfoItem from "./InfoItem";
 
 export default function RoomTypeDetailsModal({
   roomType,
@@ -27,21 +28,21 @@ export default function RoomTypeDetailsModal({
 
   return (
     <div
-      className="fixed inset-0 z-100 flex items-center justify-center bg-black/40 p-4"
+      className="fixed inset-0 z-100 flex items-center justify-center bg-black/40 p-4 dark:bg-black/50"
       onMouseDown={onClose}
     >
       <div
-        className="relative z-101 max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white shadow-xl"
+        className="relative z-101 max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white shadow-xl dark:bg-zinc-800 dark:text-white"
         onMouseDown={(event) => event.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b px-6 py-5">
+        <div className="flex items-center justify-between border-b px-6 py-5 dark:border-b-zinc-600">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
               {name}
             </h2>
 
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
               Room type details
             </p>
           </div>
@@ -49,7 +50,8 @@ export default function RoomTypeDetailsModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+            className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 
+            hover:text-gray-900 dark:hover:bg-zinc-700 dark:hover:text-white"
           >
             <X size={20} />
           </button>
@@ -59,7 +61,7 @@ export default function RoomTypeDetailsModal({
           {/* Images */}
           {roomType.images?.length > 0 && (
             <div>
-              <h3 className="mb-3 text-sm font-semibold text-gray-900">
+              <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">
                 Images
               </h3>
 
@@ -67,7 +69,7 @@ export default function RoomTypeDetailsModal({
                 {roomType.images.map((image, index) => (
                   <div
                     key={`${image}-${index}`}
-                    className="aspect-4/3 overflow-hidden rounded-xl bg-gray-100"
+                    className="aspect-4/3 overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800"
                   >
                     <img
                       src={image}
@@ -82,7 +84,7 @@ export default function RoomTypeDetailsModal({
 
           {/* Basic information */}
           <div>
-            <h3 className="mb-3 text-sm font-semibold text-gray-900">
+            <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">
               Information
             </h3>
 
@@ -116,11 +118,11 @@ export default function RoomTypeDetailsModal({
           {/* Description */}
           {roomType.description && (
             <div>
-              <h3 className="mb-2 text-sm font-semibold text-gray-900">
+              <h3 className="mb-2 text-sm font-semibold text-gray-900 dark:text-white">
                 Description
               </h3>
 
-              <p className="text-sm leading-6 text-gray-600">
+              <p className="text-sm leading-6 text-gray-600 dark:text-gray-400">
                 {roomType.description.en ||
                   roomType.description.fr ||
                   roomType.description.ar ||
@@ -132,7 +134,7 @@ export default function RoomTypeDetailsModal({
           {/* Beds */}
           {roomType.beds?.length > 0 && (
             <div>
-              <h3 className="mb-3 text-sm font-semibold text-gray-900">
+              <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">
                 Beds
               </h3>
 
@@ -140,7 +142,7 @@ export default function RoomTypeDetailsModal({
                 {roomType.beds.map((bed, index) => (
                   <div
                     key={index}
-                    className="rounded-lg bg-gray-100 px-3 py-2 text-sm text-gray-700"
+                    className="rounded-lg bg-gray-100 px-3 py-2 text-sm text-gray-700 dark:bg-zinc-700 dark:text-gray-400"
                   >
                     {bed.quantity} × {bed.type}
                   </div>
@@ -152,7 +154,7 @@ export default function RoomTypeDetailsModal({
           {/* Amenities */}
           {roomType.amenities?.length > 0 && (
             <div>
-              <h3 className="mb-3 text-sm font-semibold text-gray-900">
+              <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">
                 Amenities
               </h3>
 
@@ -160,7 +162,8 @@ export default function RoomTypeDetailsModal({
                 {roomType.amenities.map((amenity) => (
                   <span
                     key={amenity}
-                    className="rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-600"
+                    className="rounded-lg border border-gray-200 px-3 py-2 text-sm 
+                    text-gray-600 dark:border-zinc-700 dark:text-gray-400"
                   >
                     {amenity}
                   </span>
@@ -173,24 +176,24 @@ export default function RoomTypeDetailsModal({
           <div>
             <div className="mb-3 flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-semibold text-gray-900">
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
                   Assigned Rooms
                 </h3>
 
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                   Physical rooms currently using this room type.
                 </p>
               </div>
 
-              <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">
+              <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600 dark:bg-zinc-700 dark:text-gray-400">
                 {rooms.length}{" "}
                 {rooms.length === 1 ? "room" : "rooms"}
               </span>
             </div>
 
             {rooms.length === 0 ? (
-              <div className="rounded-xl border border-dashed border-gray-300 px-4 py-8 text-center">
-                <p className="text-sm text-gray-500">
+              <div className="rounded-xl border border-dashed border-gray-300 px-4 py-8 text-center dark:border-gray-700">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   No physical rooms are assigned to this
                   room type.
                 </p>
@@ -200,15 +203,15 @@ export default function RoomTypeDetailsModal({
                 {rooms.map((room) => (
                   <div
                     key={room.id}
-                    className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-2"
+                    className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 dark:border-gray-700 dark:bg-zinc-700"
                   >
-                    <span className="font-medium text-gray-900">
+                    <span className="font-medium text-gray-900 dark:text-white">
                       {room.room_number}
                     </span>
 
                     {room.floor !== null &&
                       room.floor !== undefined && (
-                        <span className="ml-2 text-xs text-gray-500">
+                        <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
                           Floor {room.floor}
                         </span>
                       )}
@@ -223,13 +226,3 @@ export default function RoomTypeDetailsModal({
   );
 }
 
-function InfoItem({ label, value }) {
-  return (
-    <div className="rounded-xl bg-gray-50 p-3">
-      <p className="text-xs text-gray-500">{label}</p>
-      <p className="mt-1 text-sm font-medium capitalize text-gray-900">
-        {value}
-      </p>
-    </div>
-  );
-}

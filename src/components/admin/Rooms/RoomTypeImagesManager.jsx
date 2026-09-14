@@ -1,16 +1,9 @@
 import { useRef, useState } from "react";
-import {
-  ImagePlus,
-  GripVertical,
-  Trash2,
-} from "lucide-react";
+import { ImagePlus, GripVertical, Trash2 } from "lucide-react";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
-export default function RoomTypeImagesManager({
-  files = [],
-  onChange,
-}) {
+export default function RoomTypeImagesManager({ files = [], onChange }) {
   const inputRef = useRef(null);
   const [error, setError] = useState("");
   const [draggedIndex, setDraggedIndex] = useState(null);
@@ -57,20 +50,14 @@ export default function RoomTypeImagesManager({
   }
 
   function handleDrop(index) {
-    if (
-      draggedIndex === null ||
-      draggedIndex === index
-    ) {
+    if (draggedIndex === null || draggedIndex === index) {
       setDraggedIndex(null);
       return;
     }
 
     const updatedFiles = [...files];
 
-    const [movedFile] = updatedFiles.splice(
-      draggedIndex,
-      1
-    );
+    const [movedFile] = updatedFiles.splice(draggedIndex, 1);
 
     updatedFiles.splice(index, 0, movedFile);
 
@@ -89,18 +76,18 @@ export default function RoomTypeImagesManager({
   return (
     <div className="mt-6">
       <div className="mb-3">
-        <h3 className="text-sm font-medium text-gray-900">
+        <h3 className="text-sm font-medium text-gray-900 dark:text-white">
           Room Images
         </h3>
 
         <p className="mt-1 text-xs text-gray-500">
-          The first image will be used as the main image.
-          Drag images to change their order.
+          The first image will be used as the main image. Drag images to change
+          their order.
         </p>
       </div>
 
       {error && (
-        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-600">
+        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-600 dark:border-red-800 dark:bg-red-900">
           {error}
         </div>
       )}
@@ -115,10 +102,8 @@ export default function RoomTypeImagesManager({
               onDragOver={handleDragOver}
               onDrop={() => handleDrop(index)}
               onDragEnd={handleDragEnd}
-              className={`group relative aspect-4/3 overflow-hidden rounded-xl border bg-gray-100 ${
-                draggedIndex === index
-                  ? "opacity-50"
-                  : ""
+              className={`group relative aspect-4/3 overflow-hidden rounded-xl border bg-gray-100 dark:bg-gray-700 ${
+                draggedIndex === index ? "opacity-50" : ""
               }`}
             >
               <img
@@ -154,13 +139,12 @@ export default function RoomTypeImagesManager({
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-300 px-4 py-7 text-sm text-gray-500 transition hover:border-gray-400 hover:bg-gray-50"
+          className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-300 px-4 py-7 text-sm text-gray-500 transition 
+          hover:border-gray-400 hover:bg-zinc-600 dark:border-gray-700 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:bg-zinc-700"
         >
           <ImagePlus size={20} />
 
-          {files.length
-            ? "Add more images"
-            : "Upload room images"}
+          {files.length ? "Add more images" : "Upload room images"}
         </button>
 
         <input
@@ -172,7 +156,7 @@ export default function RoomTypeImagesManager({
           onChange={handleInputChange}
         />
 
-        <p className="mt-2 text-center text-xs text-gray-400">
+        <p className="mt-2 text-center text-xs text-gray-400 dark:text-gray-300">
           JPG, PNG, WEBP, etc. · Maximum 10 MB per image
         </p>
       </div>

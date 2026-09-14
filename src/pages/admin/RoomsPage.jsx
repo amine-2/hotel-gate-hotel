@@ -80,25 +80,18 @@ export default function RoomsPage() {
 
     setDeletingId(roomType.id);
 
-    const { error } = await deleteRoomType(
-      hotelId,
-      roomType.id
-    );
+    const { error } = await deleteRoomType(hotelId, roomType.id);
 
     if (error) {
       console.error("Failed to delete room type:", error);
 
-      setError(
-        error.message || "Failed to delete room type."
-      );
+      setError(error.message || "Failed to delete room type.");
 
       setDeletingId(null);
       return;
     }
 
-    setRoomTypes((prev) =>
-      prev.filter((item) => item.id !== roomType.id)
-    );
+    setRoomTypes((prev) => prev.filter((item) => item.id !== roomType.id));
 
     if (selectedRoomType?.id === roomType.id) {
       setSelectedRoomType(null);
@@ -133,8 +126,8 @@ export default function RoomsPage() {
               // its physical room assignments.
               rooms: item.rooms || [],
             }
-          : item
-      )
+          : item,
+      ),
     );
 
     setShowEditModal(false);
@@ -191,9 +184,7 @@ export default function RoomsPage() {
       {/* Error */}
       {error && (
         <div className="mb-6 flex items-center justify-between rounded-xl border border-red-200 bg-red-50 px-4 py-3">
-          <p className="text-sm text-red-600">
-            {error}
-          </p>
+          <p className="text-sm text-red-600">{error}</p>
 
           <button
             type="button"
@@ -218,8 +209,8 @@ export default function RoomsPage() {
             </h2>
 
             <p className="mt-2 text-sm leading-6 text-gray-500 dark:text-gray-400">
-              Create your first room type, then assign your
-              physical rooms to it.
+              Create your first room type, then assign your physical rooms to
+              it.
             </p>
 
             <button
@@ -270,10 +261,12 @@ export default function RoomsPage() {
           hotelId={hotelId}
           roomType={selectedRoomType}
           onClose={closeEdit}
-          onUpdated={handleRoomTypeUpdated}
+          onUpdated={async () => {
+            await loadRoomTypes();
+            setSelectedRoomType(null);
+          }}
         />
       )}
     </div>
   );
 }
-

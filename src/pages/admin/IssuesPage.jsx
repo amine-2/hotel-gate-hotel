@@ -4,7 +4,7 @@ import { useAuth } from "../../auth/AuthContext";
 import AddIssueModal from "../../components/AddIssueModal";
 import IssuesList from "../../components/IssuesList";
 import IssueDetailsModal from "../../components/IssueDetailsModal";
-import HotelFilter from "../../components/manager/Staff/ui/HotelFilter";
+import { useHotel } from "../../auth/HotelContext";
 
 import { getIssuesByHotel } from "../../lib/issues/getIssuesByHotel";
 import { updateIssue } from "../../lib/issues/updateIssue";
@@ -21,9 +21,6 @@ export default function IssuesPage() {
     const [issues, setIssues] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const [hotelFilter, setHotelFilter] =
-        useState("all");
-
     const [openCreate, setOpenCreate] =
         useState(false);
 
@@ -31,10 +28,12 @@ export default function IssuesPage() {
         useState(null);
 
     /* ---------------- FETCH ---------------- */
-
+    const { hotelId } = useHotel();
+    const [hotelFilter, setHotelFilter] = useState(hotelId);
     useEffect(() => {
+        setHotelFilter(hotelId);
         fetchIssues();
-    }, [hotelFilter]);
+    }, [hotelId]);
 
     const fetchIssues = async () => {
         setLoading(true);
@@ -72,10 +71,7 @@ export default function IssuesPage() {
     /* ---------------- HANDLERS ---------------- */
 
     const handleCreate = (newIssue) => {
-        /*
-         * Extra protection in case something
-         * outside the modal creates an issue.
-         */
+       
         if (
             !ALLOWED_CATEGORIES.includes(
                 newIssue?.category
@@ -182,13 +178,6 @@ export default function IssuesPage() {
                     <h2 className="text-xl font-semibold">
                         Issues
                     </h2>
-
-                    <HotelFilter
-                        value={hotelFilter}
-                        onChange={
-                            setHotelFilter
-                        }
-                    />
 
                 </div>
 

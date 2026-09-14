@@ -1,10 +1,6 @@
 import { supabase } from "../supabase";
 
-export async function updateRoomType(
-  hotelId,
-  roomTypeId,
-  roomType
-) {
+export async function updateRoomType(hotelId, roomTypeId, roomType) {
   if (!hotelId) {
     return {
       data: null,
@@ -28,11 +24,11 @@ export async function updateRoomType(
     amenities: roomType.amenities || [],
     free_cancellation: Boolean(roomType.free_cancellation),
     discount:
-      roomType.discount === "" ||
-      roomType.discount === null
+      roomType.discount === "" || roomType.discount === null
         ? null
         : Number(roomType.discount),
     size: Number(roomType.size) || 0,
+    status: roomType.status || "draft",
   };
 
   if (!Number.isFinite(payload.price_per_night)) {
@@ -42,15 +38,10 @@ export async function updateRoomType(
     };
   }
 
-  if (
-    !Number.isInteger(payload.capacity) ||
-    payload.capacity <= 0
-  ) {
+  if (!Number.isInteger(payload.capacity) || payload.capacity <= 0) {
     return {
       data: null,
-      error: new Error(
-        "Capacity must be a whole number greater than 0."
-      ),
+      error: new Error("Capacity must be a whole number greater than 0."),
     };
   }
 

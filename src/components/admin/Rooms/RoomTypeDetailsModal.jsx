@@ -1,10 +1,32 @@
+import { useEffect, useState } from "react";
 import { X } from "lucide-react";
+
 import InfoItem from "./InfoItem";
+import { getAmenities } from "../../../lib/rooms/getAmenities";
 
 export default function RoomTypeDetailsModal({
   roomType,
   onClose,
 }) {
+  const [availableAmenities, setAvailableAmenities] = useState([]);
+
+  useEffect(() => {
+    if (!roomType) return;
+
+    async function loadAmenities() {
+      const { data, error } = await getAmenities();
+
+      if (error) {
+        console.error("Failed to load amenities:", error);
+        return;
+      }
+
+      setAvailableAmenities(data || []);
+    }
+
+    loadAmenities();
+  }, [roomType]);
+
   if (!roomType) return null;
 
   const name =
@@ -13,18 +35,34 @@ export default function RoomTypeDetailsModal({
     roomType.name?.ar ||
     "Unnamed Room Type";
 
-  const rooms = [...(roomType.rooms || [])].sort(
-    (a, b) => {
-      return (
-        Number(a.floor || 0) - Number(b.floor || 0) ||
-        String(a.room_number).localeCompare(
-          String(b.room_number),
-          undefined,
-          { numeric: true }
-        )
-      );
-    }
-  );
+  const rooms = [...(roomType.rooms || [])].sort((a, b) => {
+    return (
+      Number(a.floor || 0) - Number(b.floor || 0) ||
+      String(a.room_number).localeCompare(
+        String(b.room_number),
+        undefined,
+        { numeric: true }
+      )
+    );
+  });
+
+  const roomTypeAmenities = (roomType.amenities || [])
+    .map((amenityId) =>
+      availableAmenities.find(
+        (amenity) => amenity.id === amenityId
+      )
+    )
+    .filter(Boolean);
+
+  function getAmenityLabel(amenity) {
+    return (
+      amenity.name?.en ||
+      amenity.name?.fr ||
+      amenity.name?.ar ||
+      amenity.key ||
+      "Unnamed amenity"
+    );
+  }
 
   return (
     <div
@@ -50,8 +88,7 @@ export default function RoomTypeDetailsModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 
-            hover:text-gray-900 dark:hover:bg-zinc-700 dark:hover:text-white"
+            className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-zinc-700 dark:hover:text-white"
           >
             <X size={20} />
           </button>
@@ -152,21 +189,28 @@ export default function RoomTypeDetailsModal({
           )}
 
           {/* Amenities */}
-          {roomType.amenities?.length > 0 && (
+          {roomTypeAmenities.length > 0 && (
             <div>
               <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">
                 Amenities
               </h3>
 
               <div className="flex flex-wrap gap-2">
-                {roomType.amenities.map((amenity) => (
-                  <span
-                    key={amenity}
-                    className="rounded-lg border border-gray-200 px-3 py-2 text-sm 
-                    text-gray-600 dark:border-zinc-700 dark:text-gray-400"
+                {roomTypeAmenities.map((amenity) => (
+                  <div
+                    key={amenity.id}
+                    className="flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-600 dark:border-zinc-700 dark:text-gray-400"
                   >
-                    {amenity}
-                  </span>
+                    {amenity.icon && (
+                      <img
+                        src={amenity.icon}
+                        alt=""
+                        className="h-5 w-5 object-contain dark:invert"
+                      />
+                    )}
+
+                    <span>{getAmenityLabel(amenity)}</span>
+                  </div>
                 ))}
               </div>
             </div>
@@ -225,4 +269,3 @@ export default function RoomTypeDetailsModal({
     </div>
   );
 }
-

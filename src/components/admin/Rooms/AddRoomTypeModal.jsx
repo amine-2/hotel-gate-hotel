@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Plus } from "lucide-react";
+import { getAmenities } from "../../../lib/rooms/getAmenities";
+import CreateAmenityModal from "./CreateAmenityModal";
 import { createRoomType } from "../../../lib/rooms/createRoomType";
 import RoomTypeImagesManager from "./RoomTypeImagesManager";
 import { uploadRoomTypeImage } from "../../../lib/rooms/uploadRoomTypeImage";
@@ -33,10 +36,28 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
   ]);
 
   const [amenities, setAmenities] = useState([]);
+  const [availableAmenities, setAvailableAmenities] = useState([]);
+  const [showCreateAmenity, setShowCreateAmenity] = useState(false);
 
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [images, setImages] = useState([]);
+
+  useEffect(() => {
+    async function loadAmenities() {
+      const { data, error } = await getAmenities();
+
+      if (error) {
+        console.error("Failed to load amenities:", error);
+        setError(error.message || "Failed to load amenities.");
+        return;
+      }
+
+      setAvailableAmenities(data || []);
+    }
+
+    loadAmenities();
+  }, []);
 
   function updateBed(index, field, value) {
     setBeds((prev) =>
@@ -73,220 +94,179 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
     );
   }
 
+  function getAmenityLabel(amenity) {
+    return (
+      amenity.name?.en ||
+      amenity.name?.fr ||
+      amenity.name?.ar ||
+      amenity.key ||
+      "Unnamed amenity"
+    );
+  }
+
   async function handleSubmit() {
-  setError(null);
+    setError(null);
 
-  if (!nameEn.trim()) {
-    setError("English room type name is required.");
-    return;
-  }
+    if (!nameEn.trim()) {
+      setError("English room type name is required.");
+      return;
+    }
 
-  if (!nameFr.trim()) {
-    setError("French room type name is required.");
-    return;
-  }
+    if (!nameFr.trim()) {
+      setError("French room type name is required.");
+      return;
+    }
 
-  if (!nameAr.trim()) {
-    setError("Arabic room type name is required.");
-    return;
-  }
+    if (!nameAr.trim()) {
+      setError("Arabic room type name is required.");
+      return;
+    }
 
-  if (price === "" || Number(price) < 0) {
-    setError("Enter a valid price.");
-    return;
-  }
+    if (price === "" || Number(price) < 0) {
+      setError("Enter a valid price.");
+      return;
+    }
 
-  if (
-    capacity === "" ||
-    !Number.isInteger(Number(capacity)) ||
-    Number(capacity) <= 0
-  ) {
-    setError("Capacity must be a whole number greater than 0.");
-    return;
-  }
+    if (
+      capacity === "" ||
+      !Number.isInteger(Number(capacity)) ||
+      Number(capacity) <= 0
+    ) {
+      setError("Capacity must be a whole number greater than 0.");
+      return;
+    }
 
-  if (size === "" || Number(size) < 0) {
-    setError("Enter a valid room size.");
-    return;
-  }
+    if (size === "" || Number(size) < 0) {
+      setError("Enter a valid room size.");
+      return;
+    }
 
-  if (
-    discount !== "" &&
-    (Number(discount) < 0 || Number(discount) > 100)
-  ) {
-    setError("Discount must be between 0 and 100.");
-    return;
-  }
+    if (discount !== "" && (Number(discount) < 0 || Number(discount) > 100)) {
+      setError("Discount must be between 0 and 100.");
+      return;
+    }
 
-  setSaving(true);
+    setSaving(true);
 
-  const payload = {
-    name: {
-      en: nameEn.trim(),
-      fr: nameFr.trim(),
-      ar: nameAr.trim(),
-    },
+    const payload = {
+      name: {
+        en: nameEn.trim(),
+        fr: nameFr.trim(),
+        ar: nameAr.trim(),
+      },
 
-    description: {
-      en: descriptionEn.trim(),
-      fr: descriptionFr.trim(),
-      ar: descriptionAr.trim(),
-    },
+      description: {
+        en: descriptionEn.trim(),
+        fr: descriptionFr.trim(),
+        ar: descriptionAr.trim(),
+      },
 
-    price_per_night: price,
-    capacity,
-    size,
+      price_per_night: price,
+      capacity,
+      size,
 
-    beds: beds.filter(
-      (bed) => bed.type.trim() && Number(bed.quantity) > 0
-    ),
+      beds: beds.filter((bed) => bed.type.trim() && Number(bed.quantity) > 0),
 
-    amenities,
+      amenities,
 
-    free_cancellation: freeCancellation,
+      free_cancellation: freeCancellation,
 
-    discount,
-  };
+      discount,
+    };
 
-  // 1. Create the room type first
-  const {
-    data: createdRoomType,
-    error: createError,
-  } = await createRoomType(hotelId, payload);
-
-  if (createError) {
-    console.error(
-      "Failed to create room type:",
-      createError
-    );
-
-    setError(
-      createError.message || "Failed to create room type."
-    );
-
-    setSaving(false);
-    return;
-  }
-
-  // No images selected
-  if (!images.length) {
-    onCreated?.({
-      ...createdRoomType,
-      images: [],
-      rooms: [],
-    });
-
-    setSaving(false);
-    return;
-  }
-
-  // 2. Upload images in their current order
-  const uploadedPaths = [];
-  const imageUrls = [];
-
-  for (const file of images) {
-    const {
-      data: uploadedImage,
-      error: uploadError,
-    } = await uploadRoomTypeImage(
+    // 1. Create the room type first
+    const { data: createdRoomType, error: createError } = await createRoomType(
       hotelId,
-      createdRoomType.id,
-      file
+      payload,
     );
 
-    if (uploadError) {
-      console.error(
-        "Failed to upload room type image:",
-        uploadError
-      );
+    if (createError) {
+      console.error("Failed to create room type:", createError);
 
-      // Clean up files that were already uploaded
-      for (const path of uploadedPaths) {
-        const { error: deleteError } =
-          await supabase.storage
+      setError(createError.message || "Failed to create room type.");
+
+      setSaving(false);
+      return;
+    }
+
+    // No images selected
+    if (!images.length) {
+      onCreated?.({
+        ...createdRoomType,
+        images: [],
+        rooms: [],
+      });
+
+      setSaving(false);
+      return;
+    }
+
+    // 2. Upload images in their current order
+    const uploadedPaths = [];
+    const imageUrls = [];
+
+    for (const file of images) {
+      const { data: uploadedImage, error: uploadError } =
+        await uploadRoomTypeImage(hotelId, createdRoomType.id, file);
+
+      if (uploadError) {
+        console.error("Failed to upload room type image:", uploadError);
+
+        // Clean up files that were already uploaded
+        for (const path of uploadedPaths) {
+          const { error: deleteError } = await supabase.storage
             .from("room-types-imgs")
             .remove([path]);
 
+          if (deleteError) {
+            console.error("Failed to clean up uploaded image:", deleteError);
+          }
+        }
+
+        setError(uploadError.message || "Failed to upload room type images.");
+
+        setSaving(false);
+        return;
+      }
+
+      uploadedPaths.push(uploadedImage.path);
+      imageUrls.push(uploadedImage.url);
+    }
+
+    // 3. Save the image URLs in room_types.images
+    const { data: updatedRoomType, error: imageUpdateError } =
+      await updateRoomTypeImages(hotelId, createdRoomType.id, imageUrls);
+
+    if (imageUpdateError) {
+      console.error("Failed to save room type images:", imageUpdateError);
+
+      // Clean up uploaded files
+      for (const path of uploadedPaths) {
+        const { error: deleteError } = await supabase.storage
+          .from("room-types-imgs")
+          .remove([path]);
+
         if (deleteError) {
-          console.error(
-            "Failed to clean up uploaded image:",
-            deleteError
-          );
+          console.error("Failed to clean up uploaded image:", deleteError);
         }
       }
 
       setError(
-        uploadError.message ||
-          "Failed to upload room type images."
+        imageUpdateError.message || "Images uploaded but could not be saved.",
       );
 
       setSaving(false);
       return;
     }
 
-    uploadedPaths.push(uploadedImage.path);
-    imageUrls.push(uploadedImage.url);
-  }
-
-  // 3. Save the image URLs in room_types.images
-  const {
-    data: updatedRoomType,
-    error: imageUpdateError,
-  } = await updateRoomTypeImages(
-    hotelId,
-    createdRoomType.id,
-    imageUrls
-  );
-
-  if (imageUpdateError) {
-    console.error(
-      "Failed to save room type images:",
-      imageUpdateError
-    );
-
-    // Clean up uploaded files
-    for (const path of uploadedPaths) {
-      const { error: deleteError } =
-        await supabase.storage
-          .from("room-types-imgs")
-          .remove([path]);
-
-      if (deleteError) {
-        console.error(
-          "Failed to clean up uploaded image:",
-          deleteError
-        );
-      }
-    }
-
-    setError(
-      imageUpdateError.message ||
-        "Images uploaded but could not be saved."
-    );
+    // 4. Return the completed room type to RoomsPage
+    onCreated?.({
+      ...updatedRoomType,
+      rooms: [],
+    });
 
     setSaving(false);
-    return;
   }
-
-  // 4. Return the completed room type to RoomsPage
-  onCreated?.({
-    ...updatedRoomType,
-    rooms: [],
-  });
-
-  setSaving(false);
-}
-
-  const availableAmenities = [
-    "Wi-Fi",
-    "Air Conditioning",
-    "TV",
-    "Mini Bar",
-    "Safe",
-    "Hair Dryer",
-    "Desk",
-    "Balcony",
-  ];
 
   return (
     <div
@@ -478,29 +458,47 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
 
           {/* Amenities */}
           <section>
-            <h3 className="mb-3 text-sm font-medium">Amenities</h3>
+            <div className="mb-3 flex items-center justify-between">
+              <h3 className="text-sm font-medium">Amenities</h3>
 
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-              {availableAmenities.map((amenity) => {
-                const selected = amenities.includes(amenity);
-
-                return (
-                  <button
-                    key={amenity}
-                    type="button"
-                    onClick={() => toggleAmenity(amenity)}
-                    disabled={saving}
-                    className={`rounded-lg border px-3 py-2 text-sm dark:border-zinc-600 transition ${
-                      selected
-                        ? "border-black bg-black text-white dark:bg-orange-400 dark:text-white"
-                        : "hover:bg-gray-50 dark:hover:bg-zinc-700/50 dark:hover:text-zinc-300"
-                    }`}
-                  >
-                    {amenity}
-                  </button>
-                );
-              })}
+              <button
+                type="button"
+                onClick={() => setShowCreateAmenity(true)}
+                disabled={saving}
+                className="inline-flex items-center gap-1 rounded-lg border px-3 py-1.5 text-sm hover:bg-gray-50 dark:border-zinc-600 dark:hover:bg-zinc-700/50"
+              >
+                <Plus size={15} />
+                New Amenity
+              </button>
             </div>
+
+            {availableAmenities.length === 0 ? (
+              <div className="rounded-lg border border-dashed p-4 text-center text-sm text-gray-500 dark:border-zinc-600 dark:text-zinc-400">
+                No amenities available.
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                {availableAmenities.map((amenity) => {
+                  const selected = amenities.includes(amenity.id);
+
+                  return (
+                    <button
+                      key={amenity.id}
+                      type="button"
+                      onClick={() => toggleAmenity(amenity.id)}
+                      disabled={saving}
+                      className={`rounded-lg border px-3 py-2 text-sm transition dark:border-zinc-600 ${
+                        selected
+                          ? "border-black bg-black text-white dark:bg-orange-400 dark:text-white"
+                          : "hover:bg-gray-50 dark:hover:bg-zinc-700/50 dark:hover:text-zinc-300"
+                      }`}
+                    >
+                      {getAmenityLabel(amenity)}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </section>
 
           {/* Cancellation / Discount */}
@@ -563,13 +561,22 @@ export default function AddRoomTypeModal({ hotelId, onClose, onCreated }) {
             </button>
           </div>
         </div>
+        {showCreateAmenity && (
+          <CreateAmenityModal
+            onClose={() => setShowCreateAmenity(false)}
+            onCreated={(newAmenity) => {
+              setAvailableAmenities((prev) =>
+                [...prev, newAmenity].sort((a, b) =>
+                  String(a.key).localeCompare(String(b.key)),
+                ),
+              );
+
+              // Automatically select the new amenity
+              setAmenities((prev) => [...prev, newAmenity.id]);
+            }}
+          />
+        )}
       </div>
     </div>
   );
 }
-
-
-
-
-
-

@@ -8,9 +8,12 @@ import { deleteRoomTypeImage } from "../../../lib/rooms/deleteRoomTypeImage";
 import { getRoomTypeImagePath } from "../../../lib/rooms/getRoomTypeImagePath";
 import { removeRoomFromRoomType } from "../../../lib/rooms/removeRoomFromRoomType";
 import AddRoomsToRoomTypeModal from "./AddRoomsToRoomTypeModal";
+import { getAmenities } from "../../../lib/rooms/getAmenities";
+import CreateAmenityModal from "./CreateAmenityModal";
 import TextAreaField from "./TextAreaField";
 import TextField from "./TextField";
 import NumberField from "./NumberField";
+import { s } from "framer-motion/client";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
@@ -21,7 +24,6 @@ export default function EditRoomTypeModal({
   onUpdated,
 }) {
   const inputRef = useRef(null);
-
 
   const [name, setName] = useState({
     en: "",
@@ -42,12 +44,21 @@ export default function EditRoomTypeModal({
       quantity: 1,
     },
   ]);
+  const [availableAmenities, setAvailableAmenities] = useState([]);
+  const [showCreateAmenity, setShowCreateAmenity] = useState(false);
+  const [newAmenityName, setNewAmenityName] = useState({
+    en: "",
+    fr: "",
+    ar: "",
+  });
+  const [creatingAmenity, setCreatingAmenity] = useState(false);
 
   const [amenities, setAmenities] = useState([]);
   const [freeCancellation, setFreeCancellation] = useState(false);
   const [discount, setDiscount] = useState("");
   const [images, setImages] = useState([]);
   const [assignedRooms, setAssignedRooms] = useState([]);
+  const [status, setStatus] = useState("draft");
 
   const [showAddRooms, setShowAddRooms] = useState(false);
   const [removingRoomId, setRemovingRoomId] = useState(null);
@@ -55,6 +66,35 @@ export default function EditRoomTypeModal({
   const [error, setError] = useState("");
   const [draggedIndex, setDraggedIndex] = useState(null);
 
+  function sortRoomsNumerically(rooms) {
+    return [...rooms].sort((a, b) => {
+      const floorA = Number(a.floor ?? 0);
+      const floorB = Number(b.floor ?? 0);
+
+      if (floorA !== floorB) {
+        return floorA - floorB;
+      }
+
+      return String(a.room_number).localeCompare(
+        String(b.room_number),
+        undefined,
+        {
+          numeric: true,
+          sensitivity: "base",
+        },
+      );
+    });
+  }
+
+  function getAmenityLabel(amenity) {
+    return (
+      amenity.name?.en ||
+      amenity.name?.fr ||
+      amenity.name?.ar ||
+      amenity.key ||
+      "Unnamed amenity"
+    );
+  }
   useEffect(() => {
     if (!roomType) return;
 
@@ -107,8 +147,27 @@ export default function EditRoomTypeModal({
         : [],
     );
 
-    setAssignedRooms(Array.isArray(roomType.rooms) ? [...roomType.rooms] : []);
+    setAssignedRooms(
+      sortRoomsNumerically(Array.isArray(roomType.rooms) ? roomType.rooms : []),
+    );
+
+    setStatus(roomType.status === "published" ? "published" : "draft");
   }, [roomType]);
+
+  useEffect(() => {
+    async function loadAmenities() {
+      const { data, error } = await getAmenities();
+
+      if (error) {
+        console.error("Failed to load amenities:", error);
+        return;
+      }
+
+      setAvailableAmenities(data);
+    }
+
+    loadAmenities();
+  }, []);
 
   // --------------------------------------------------
   // Name
@@ -260,7 +319,12 @@ export default function EditRoomTypeModal({
     setAssignedRooms((prev) => {
       const existingIds = new Set(prev.map((room) => room.id));
 
-      return [...prev, ...newRooms.filter((room) => !existingIds.has(room.id))];
+      const mergedRooms = [
+        ...prev,
+        ...newRooms.filter((room) => !existingIds.has(room.id)),
+      ];
+
+      return sortRoomsNumerically(mergedRooms);
     });
 
     setShowAddRooms(false);
@@ -371,6 +435,7 @@ export default function EditRoomTypeModal({
           amenities,
           free_cancellation: freeCancellation,
           discount,
+          status,
         });
 
       if (updateError) {
@@ -735,7 +800,9 @@ export default function EditRoomTypeModal({
           <section>
             <div className="mb-4 flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Beds</h3>
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+                  Beds
+                </h3>
 
                 <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                   Specify the type and quantity of each bed.
@@ -819,42 +886,61 @@ export default function EditRoomTypeModal({
 
           {/* Amenities */}
 
-          <section>
-            <h3 className="mb-4 text-sm font-semibold text-gray-900 dark:text-white">
-              Amenities
-            </h3>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                Amenities
+              </label>
 
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {[
-                "Wi-Fi",
-                "Air Conditioning",
-                "TV",
-                "Mini Bar",
-                "Safe",
-                "Hair Dryer",
-                "Desk",
-                "Balcony",
-              ].map((amenity) => {
-                const selected = amenities.includes(amenity);
+              <button
+                type="button"
+                onClick={() => setShowCreateAmenity((prev) => !prev)}
+                className="inline-flex items-center gap-1 rounded-lg border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-100 dark:border-zinc-700 dark:hover:bg-zinc-800"
+              >
+                <Plus size={15} />
+                New amenity
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
+              {availableAmenities.map((amenity) => {
+                const selected = amenities.includes(amenity.id);
 
                 return (
-                  <button
-                    key={amenity}
-                    type="button"
-                    onClick={() => toggleAmenity(amenity)}
-                    disabled={saving}
-                    className={`rounded-lg border px-3 py-2.5 text-left text-sm transition ${
+                  <label
+                    key={amenity.id}
+                    className={`flex cursor-pointer items-center gap-2 rounded-lg border p-2 text-sm transition ${
                       selected
-                        ? "border-gray-900 bg-gray-900 text-white dark:bg-orange-400 dark:text-white"
-                        : "border-gray-200 text-gray-600 hover:bg-gray-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                        ? "border-orange-500 bg-orange-50 dark:bg-orange-800/30"
+                        : "border-gray-200 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-zinc-700"
                     }`}
                   >
-                    {amenity}
-                  </button>
+                    <input
+                      type="checkbox"
+                      checked={selected}
+                      onChange={() => {
+                        setAmenities((prev) =>
+                          selected
+                            ? prev.filter((id) => id !== amenity.id)
+                            : [...prev, amenity.id],
+                        );
+                      }}
+                    />
+
+                    {amenity.icon && (
+                      <img
+                        src={amenity.icon}
+                        alt=""
+                        className="h-5 w-5 object-contain dark:invert"
+                      />
+                    )}
+
+                    <span>{getAmenityLabel(amenity)}</span>
+                  </label>
                 );
               })}
             </div>
-          </section>
+          </div>
 
           {/* Assigned Rooms */}
 
@@ -949,7 +1035,9 @@ export default function EditRoomTypeModal({
                   className="h-4 w-4 rounded border-gray-300 dark:bg-zinc-800 dark:checked:bg-orange-400 dark:checked:border-orange-400"
                 />
 
-                <span className="text-sm text-gray-700 dark:text-zinc-300">Free cancellation</span>
+                <span className="text-sm text-gray-700 dark:text-zinc-300">
+                  Free cancellation
+                </span>
               </label>
 
               <div className="max-w-xs">
@@ -964,6 +1052,55 @@ export default function EditRoomTypeModal({
                   disabled={saving}
                 />
               </div>
+            </div>
+          </section>
+          {/* Publishing Status */}
+
+          <section>
+            <div className="mb-4">
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+                Publishing Status
+              </h3>
+
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                Published room types can appear on the hotel website.
+              </p>
+            </div>
+
+            <div className="flex items-center justify-between rounded-xl border border-gray-200 p-4 dark:border-zinc-700 dark:bg-zinc-800">
+              <div>
+                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                  {status === "published" ? "Published" : "Draft"}
+                </p>
+
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                  {status === "published"
+                    ? "This room type is visible to website visitors."
+                    : "This room type is hidden from website visitors."}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setStatus((prev) =>
+                    prev === "published" ? "draft" : "published",
+                  )
+                }
+                disabled={saving}
+                className={`relative h-6 w-11 rounded-full transition ${
+                  status === "published"
+                    ? "bg-orange-400"
+                    : "bg-gray-300 dark:bg-zinc-600"
+                }`}
+                aria-label="Toggle publishing status"
+              >
+                <span
+                  className={`absolute top-1 h-4 w-4 rounded-full bg-white transition ${
+                    status === "published" ? "left-6" : "left-1"
+                  }`}
+                />
+              </button>
             </div>
           </section>
         </div>
@@ -1000,13 +1137,22 @@ export default function EditRoomTypeModal({
             onAdded={handleRoomsAdded}
           />
         )}
+        {showCreateAmenity && (
+          <CreateAmenityModal
+            onClose={() => setShowCreateAmenity(false)}
+            onCreated={(newAmenity) => {
+              setAvailableAmenities((prev) =>
+                [...prev, newAmenity].sort((a, b) =>
+                  String(a.key).localeCompare(String(b.key)),
+                ),
+              );
+
+              // Automatically select the newly created amenity
+              setAmenities((prev) => [...prev, newAmenity.id]);
+            }}
+          />
+        )}
       </div>
     </div>
   );
 }
-
-
-
-
-
-

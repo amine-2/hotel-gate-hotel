@@ -4,10 +4,13 @@ import Navbar from "../../components/Navbar";
 import { Toaster } from "sonner";
 import {
   LayoutDashboard,
-  Building2,
+  BookOpenCheck ,
+  BedDouble,
+  FileClock,
   Settings,
-  IdCardLanyard,
+  MonitorCheck,
   TriangleAlert,
+
 } from "lucide-react";
 
 export default function ReceptionLayout() {
@@ -18,8 +21,18 @@ export default function ReceptionLayout() {
       icon: LayoutDashboard,
       path: "/dashboard/reception/overview",
     },
-    { label: "hotel", icon: Building2, path: "/dashboard/reception/hotel" },
-    { label: "staff", icon: IdCardLanyard, path: "/dashboard/reception/staff" },
+    { label: "Reservations", icon: BookOpenCheck, path: "/dashboard/reception/reservations" },
+    { label: "frontdesk", icon: MonitorCheck, path: "/dashboard/reception/frontdesk" },
+    {
+      label: "rooms",
+      icon: BedDouble,
+      path: "/dashboard/reception/rooms",
+    },
+    {
+      label: "Stay history",
+      icon: FileClock,
+      path: "/dashboard/reception/stay-history",
+    },
     {
       label: "issues",
       icon: TriangleAlert,
@@ -42,7 +55,7 @@ export default function ReceptionLayout() {
           <Outlet />
         </main>
       </div>
-      <Navbar title="reception Dashbord" />
+      <Navbar title="Reception Dashboard" />
     </div>
   );
 }

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
-
 import { useHotel } from "../../auth/HotelContext";
 
 import ReservationSearch from "../../components/reception/reservations/ReservationSearch";
 import ReservationTabs from "../../components/reception/reservations/ReservationTabs";
 import BookingTable from "../../components/reception/reservations/BookingTable";
+import QRScannerModal from "../../components/reception/reservations/QRScannerModal";
 
 import { getReservations } from "../../lib/receptionist/getReservations";
 
@@ -16,10 +16,10 @@ export default function Reservations() {
 
   const [activeTab, setActiveTab] = useState("all");
   const [search, setSearch] = useState("");
-
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showQRScanner, setShowQRScanner] = useState(false);
 
   useEffect(() => {
     if (!hotelId) return;
@@ -51,10 +51,15 @@ export default function Reservations() {
     navigate(`/dashboard/reception/reservations/${booking.id}`);
   }
 
+  function handleQRScan(bookingId) {
+    setShowQRScanner(false);
+
+    navigate(`/dashboard/reception/reservations/${bookingId}`);
+  }
+
   return (
     <div className="flex min-h-full flex-col p-8 pt-16 pl-16">
       <div className="mx-auto w-[95%]">
-        {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-zinc-800 dark:text-zinc-200">
@@ -77,26 +82,24 @@ export default function Reservations() {
           </button>
         </div>
 
-        {/* Search */}
         <ReservationSearch
           search={search}
           setSearch={setSearch}
+          onScanQR={() => setShowQRScanner(true)}
+         
         />
 
-        {/* Tabs */}
         <ReservationTabs
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
 
-        {/* Error */}
         {error && (
           <div className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300">
             {error}
           </div>
         )}
 
-        {/* Loading */}
         {loading ? (
           <div className="mt-6 rounded-2xl border border-zinc-200 bg-white px-6 py-12 text-center text-sm text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900">
             Loading reservations...
@@ -108,6 +111,13 @@ export default function Reservations() {
           />
         )}
       </div>
+
+      {showQRScanner && (
+        <QRScannerModal
+          onScan={handleQRScan}
+          onClose={() => setShowQRScanner(false)}
+        />
+      )}
     </div>
   );
 }

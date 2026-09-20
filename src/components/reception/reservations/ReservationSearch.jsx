@@ -3,11 +3,9 @@ import { Search, QrCode } from "lucide-react";
 export default function ReservationSearch({
   search,
   setSearch,
+  onScanQR,
 }) {
-  function handleScan() {
-    // QR scanner will be implemented later
-    console.log("Open QR scanner");
-  }
+ 
 
   return (
     <div className="flex gap-3">
@@ -27,7 +25,7 @@ export default function ReservationSearch({
       </div>
 
       <button
-        onClick={handleScan}
+        onClick={onScanQR}
         className="flex items-center gap-2 rounded-xl border border-zinc-200 bg-white px-5 py-3 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800"
       >
         <QrCode size={19} />

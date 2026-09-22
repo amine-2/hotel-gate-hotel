@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import BookingConfirmationPDF from "../../components/reception/reservations/BookingConfirmationPDF";
 import {
   ArrowLeft,
   CalendarDays,
@@ -19,6 +20,7 @@ import { useHotel } from "../../auth/HotelContext";
 
 import { getBookingById } from "../../lib/receptionist/getBookingById";
 import { updateBooking } from "../../lib/receptionist/updateBooking";
+import { supabase } from "../../lib/supabase";
 import { updateStay } from "../../lib/receptionist/updateStay";
 import EditReservationModal from "../../components/reception/reservations/EditReservationModal";
 
@@ -29,6 +31,7 @@ export default function BookingDetails() {
   const { user } = useAuth();
 
   const [booking, setBooking] = useState(null);
+  const [hotel, setHotel] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [actionLoading, setActionLoading] = useState(false);
@@ -58,6 +61,32 @@ export default function BookingDetails() {
 
     loadBooking();
   }, [hotelId, bookingId]);
+
+  useEffect(() => {
+    if (!hotelId) return;
+
+    const loadHotel = async () => {
+      setLoading(true);
+      setError(null);
+
+      const { data, error } = await supabase
+        .from("hotel_accounts")
+        .select("*")
+        .eq("id", hotelId)
+        .single();
+
+      if (error) {
+        console.error("Failed to load hotel:", error);
+        setError("Failed to load hotel information.");
+      } else {
+        setHotel(data);
+      }
+
+      setLoading(false);
+    };
+
+    loadHotel();
+  }, [hotelId]);
 
   async function handleConfirm() {
     if (!booking) return;
@@ -597,6 +626,26 @@ export default function BookingDetails() {
               </div>
             </section>
           </div>
+        </div>
+
+        <div className="mt-6 flex justify-end">
+          <BookingConfirmationPDF
+            bookingId={booking.id}
+            guestName={booking.name}
+            hotelName={hotel.name?.en}
+            checkIn={booking.check_in_date}
+            checkOut={booking.check_out_date}
+            roomType={booking.room?.room_type?.name?.en}
+            roomNumber={booking.room?.room_number}
+            pricePerNight={booking.price_per_night}
+            discount={booking.discount}
+            totalPrice={booking.total_price}
+            paymentMethod={booking.payment_method}
+            adults={booking.adults}
+            children={booking.children}
+            status={booking.status}
+            channel={booking.channel}
+          />
         </div>
       </div>
       {showEditModal && (

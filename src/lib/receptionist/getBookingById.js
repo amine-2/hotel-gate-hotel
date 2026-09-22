@@ -36,7 +36,14 @@ export async function getBookingById({ hotelId, bookingId }) {
         id,
         room_number,
         floor,
-        room_type_id
+        room_type_id,
+
+        room_type:room_types (
+          id,
+          name,
+          description,
+          price_per_night
+        )
       ),
 
       hotel_stay:hotel_stays (
@@ -61,6 +68,8 @@ export async function getBookingById({ hotelId, bookingId }) {
   if (!data) {
     throw new Error("Booking not found");
   }
+
+  console.log("the data set:", data);
 
   return data;
 }

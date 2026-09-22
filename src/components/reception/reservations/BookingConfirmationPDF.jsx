@@ -133,14 +133,14 @@ export default function BookingConfirmationPDF({
       <div
         ref={documentRef}
         id="booking-print-document"
-        className="print-only-document relative w-[794px] min-h-[1123px] bg-white p-10 text-black shadow-2xl"
+        className="print-only-document relative w-198.5 min-h-280.75 bg-white p-10 text-black shadow-2xl"
       >
         {/* HEADER */}
         <div className="flex w-full flex-col items-center text-center">
           <img
             src="./nav-logo-2.svg"
             alt="Hotel Gates"
-            className="my-10 h-auto w-[300px]"
+            className="my-10 h-auto w-75"
           />
 
           <div className="h-0.5 w-full bg-[#f97316]" />
@@ -211,7 +211,7 @@ export default function BookingConfirmationPDF({
           </div>
 
           {/* QR CODE */}
-          <div className="flex h-[195px] w-[195px] shrink-0 items-center justify-center rounded-md bg-[#f97316] p-2">
+          <div className="flex h-48.75 w-48.75 shrink-0 items-center justify-center rounded-md bg-[#f97316] p-2">
             <QRCodeCanvas
               value={bookingId || ""}
               size={180}
@@ -255,7 +255,7 @@ export default function BookingConfirmationPDF({
         </footer>
       </div>
 
-      <div className="mt-6 w-full max-w-[794px] rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900 print:hidden">
+      <div className="mt-6 w-full max-w-198.5 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900 print:hidden">
         <p className="mb-2 text-sm font-medium text-zinc-800 dark:text-zinc-200">
           Booking Confirmation Link
         </p>

@@ -30,6 +30,7 @@ import HrStaff from "./pages/hr/HrStaff.jsx";
 import ReceptionLayout from "./pages/reception/ReceptionLayout.jsx";
 import ReceptionDashboard from "./pages/reception/ReceptionDashboard.jsx";
 import FrontDesk from "./pages/reception/FrontDesk.jsx";
+import ShiftHandover from "./pages/reception/ShiftHandover.jsx";
 import Reservations from "./pages/reception/Reservations.jsx";
 import ReceptionRooms from "./pages/reception/ReceptionRooms.jsx";
 import ReceptionSettings from "./pages/reception/ReceptionSettings.jsx";
@@ -97,6 +98,7 @@ function App() {
           <Route path="reservations/new" element={<NewReservation />} />
           <Route path="reservations/:bookingId" element={<BookingDetails />} />
           <Route path="frontdesk" element={<FrontDesk />} />
+          <Route path="frontdesk/shift-handover" element={<ShiftHandover />} />
         </Route>
       </Routes>
       <UpdateManager />

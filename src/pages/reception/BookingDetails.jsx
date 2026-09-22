@@ -632,7 +632,7 @@ export default function BookingDetails() {
           <BookingConfirmationPDF
             bookingId={booking.id}
             guestName={booking.name}
-            hotelName={hotel.name?.en}
+            hotelName={hotel.name?.en || "Hotel Gates"}
             checkIn={booking.check_in_date}
             checkOut={booking.check_out_date}
             roomType={booking.room?.room_type?.name?.en}

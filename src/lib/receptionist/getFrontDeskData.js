@@ -64,7 +64,7 @@ export async function getFrontDeskData(hotelId) {
 
   // --------------------------------------------------
   // TODAY'S DEPARTURES
-  // --------------------------------------------------
+  // ----------------------------------------------
 
   const { data: departures, error: departuresError } = await supabase
     .from("bookings")
@@ -204,4 +204,72 @@ export async function getFrontDeskData(hotelId) {
     currentStays: currentStays || [],
     pendingReservations: pendingReservations || [],
   };
+}
+
+//------------------------------------------
+// CLEANUP EXPIRED PENDING RESERVATIONS
+//------------------------------------------
+
+export async function cleanupExpiredPendingReservations(hotelId) {
+  if (!hotelId) {
+    throw new Error("Hotel ID is required");
+  }
+
+  const today = getToday();
+
+  const { data, error } = await supabase
+    .from("bookings")
+    .update({
+      status: "cancelled",
+    })
+    .eq("hotel_id", hotelId)
+    .eq("status", "pending")
+    .lt("check_in_date", today)
+    .lt("check_out_date", today)
+    .select("id");
+
+  if (error) {
+    console.error(
+      "Failed to clean expired pending reservations:",
+      error
+    );
+
+    throw error;
+  }
+
+  return data || [];
+}
+
+//-------------------------------------------
+// GET EXPIRED PENDING RESERVATION COUNT
+//-------------------------------------------
+
+export async function getExpiredPendingReservationCount(hotelId) {
+  if (!hotelId) {
+    throw new Error("Hotel ID is required");
+  }
+
+  const today = getToday();
+
+  const { count, error } = await supabase
+    .from("bookings")
+    .select("id", {
+      count: "exact",
+      head: true,
+    })
+    .eq("hotel_id", hotelId)
+    .eq("status", "pending")
+    .lt("check_in_date", today)
+    .lt("check_out_date", today);
+
+  if (error) {
+    console.error(
+      "Failed to get expired pending reservation count:",
+      error
+    );
+
+    throw error;
+  }
+
+  return count || 0;
 }

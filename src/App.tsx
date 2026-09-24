@@ -38,6 +38,8 @@ import ReceptionIssues from "./pages/reception/ReceptionIssues.jsx";
 import StayHistory from "./pages/reception/StayHistory.jsx";
 import NewReservation from "./pages/reception/NewReservation.jsx";
 import BookingDetails from "./pages/reception/BookingDetails.jsx";
+import StayDetails from "./pages/reception/StayDetails.jsx";
+import RoomDetails from "./pages/reception/RoomDetails.jsx";
 
 import UpdateManager from "./components/updater/UpdateManager";
 
@@ -93,7 +95,9 @@ function App() {
           <Route path="issues" element={<ReceptionIssues />} />
           <Route path="settings" element={<ReceptionSettings />} />
           <Route path="stay-history" element={<StayHistory />} />
+          <Route path="stay-history/:stayId" element={<StayDetails />} />
           <Route path="rooms" element={<ReceptionRooms />} />
+          <Route path="rooms/:roomId" element={<RoomDetails />} />
           <Route path="reservations" element={<Reservations />} />
           <Route path="reservations/new" element={<NewReservation />} />
           <Route path="reservations/:bookingId" element={<BookingDetails />} />

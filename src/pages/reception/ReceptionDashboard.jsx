@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/AuthContext";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import {
   BedDouble,
   DoorOpen,
   Users,
+  Plus,
   CalendarCheck,
   CalendarClock,
   ClipboardList,
@@ -12,11 +14,14 @@ import {
 
 import { useHotel } from "../../auth/HotelContext";
 import { getReceptionistDashboardStats } from "../../lib/receptionist/getReceptionistDashboardStats";
+import { i } from "framer-motion/client";
 
 export default function ReceptionDashboard() {
   const { profile } = useAuth();
   const { hotelId } = useHotel();
   const { t } = useTranslation("dashboard");
+
+  const navigate = useNavigate();
 
   const [stats, setStats] = useState({
     totalRooms: 0,
@@ -42,10 +47,7 @@ export default function ReceptionDashboard() {
         const data = await getReceptionistDashboardStats(hotelId);
         setStats(data);
       } catch (err) {
-        console.error(
-          "Failed to load receptionist dashboard stats:",
-          err
-        );
+        console.error("Failed to load receptionist dashboard stats:", err);
 
         setError("Failed to load dashboard statistics");
       } finally {
@@ -102,16 +104,25 @@ export default function ReceptionDashboard() {
   ];
 
   return (
-    <div className="flex min-h-full flex-col items-center p-8 pt-16 pl-16">
+    <div className="flex min-h-full flex-col items-center p-16">
       <div className="w-[90%]">
         <h1 className="mb-6 text-3xl font-bold text-zinc-800 dark:text-zinc-300">
           {t("welcome")}, {profile?.full_name || "Receptionist"}
         </h1>
 
-        <div className="border-b border-zinc-300 pb-4 dark:border-zinc-700">
+        <div className="w-full flex justify-between border-b border-zinc-300 pb-4 dark:border-zinc-700 mt-10">
           <h2 className="text-2xl font-bold text-zinc-800 dark:text-zinc-300">
             {t("overview")}
           </h2>
+
+          <button
+            onClick={() => navigate("/dashboard/reception/reservations/new")}
+            className="flex items-center gap-2 rounded-xl bg-zinc-900 px-5 py-3 text-sm font-semibold text-white 
+            transition hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+          >
+            <Plus size={18} />
+            New Reservation
+          </button>
         </div>
 
         {error && (
@@ -120,7 +131,7 @@ export default function ReceptionDashboard() {
           </p>
         )}
 
-        <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-16 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {summaryCards.map((card) => {
             const Icon = card.icon;
 

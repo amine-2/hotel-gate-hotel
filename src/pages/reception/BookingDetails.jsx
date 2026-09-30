@@ -23,8 +23,77 @@ import { updateBooking } from "../../lib/receptionist/updateBooking";
 import { supabase } from "../../lib/supabase";
 import { updateStay } from "../../lib/receptionist/updateStay";
 import EditReservationModal from "../../components/reception/reservations/EditReservationModal";
+import { printThermalBill } from "../../lib/receptionist/stays/thermalBillPrinter";
 
 export default function BookingDetails() {
+
+
+  const handleTestThermalPrint = async () => {
+    const result = await printThermalBill({
+        hotelName: "Hotel Gates Test Hotel",
+        hotelLocation: "Oran, Algeria",
+
+        booking: {
+            id: "TEST-BOOKING-001",
+            name: "Test Guest",
+            room_number: "205",
+            check_in_date: "2026-09-26",
+            check_out_date: "2026-09-28",
+        },
+
+        stay: {
+            id: "TEST-STAY-001",
+        },
+
+        charges: {
+            items: [
+                {
+                    id: "1",
+                    name: "Room",
+                    quantity: 1,
+                    unit_price: 50000,
+                    total: 50000,
+                },
+                {
+                    id: "2",
+                    name: "Breakfast",
+                    quantity: 2,
+                    unit_price: 2500,
+                    total: 5000,
+                },
+                {
+                    id: "3",
+                    name: "Laundry",
+                    quantity: 1,
+                    unit_price: 2000,
+                    total: 2000,
+                },
+            ],
+            subtotal: 57000,
+            discount: 0,
+            total: 57000,
+        },
+    });
+
+    if (!result.success) {
+        console.error(
+            "Thermal test failed:",
+            result.error
+        );
+
+        window.alert(
+            result.error?.message ||
+                "Thermal printing failed."
+        );
+
+        return;
+    }
+
+    window.alert(
+        "Thermal test sent successfully."
+    );
+};
+
   const navigate = useNavigate();
   const { bookingId } = useParams();
   const { hotelId } = useHotel();
@@ -656,6 +725,13 @@ export default function BookingDetails() {
           saving={actionLoading}
         />
       )}
+      <button
+    type="button"
+    onClick={handleTestThermalPrint}
+    className="rounded-lg bg-blue-600 px-4 py-2 text-white"
+>
+    Test Thermal Printer
+</button>
     </div>
   );
 }

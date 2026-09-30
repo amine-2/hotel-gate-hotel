@@ -1,141 +1,86 @@
 "use strict";
 const electron = require("electron");
 const updater = {
-  /*
-   * -----------------------------------------------------
+  /* -----------------------------------------------------
    * CHECK FOR UPDATE
-   * -----------------------------------------------------
-   */
+   * ----------------------------------------------------- */
   checkForUpdate: () => {
-    return electron.ipcRenderer.invoke(
-      "updater:check"
-    );
+    return electron.ipcRenderer.invoke("updater:check");
   },
-  /*
-   * -----------------------------------------------------
+  /* -----------------------------------------------------
    * DOWNLOAD UPDATE
-   * -----------------------------------------------------
-   */
+   * ----------------------------------------------------- */
   downloadUpdate: () => {
-    return electron.ipcRenderer.invoke(
-      "updater:download"
-    );
+    return electron.ipcRenderer.invoke("updater:download");
   },
-  /*
-   * -----------------------------------------------------
+  /* -----------------------------------------------------
    * INSTALL UPDATE
-   * -----------------------------------------------------
-   */
+   * ----------------------------------------------------- */
   installUpdate: () => {
-    return electron.ipcRenderer.invoke(
-      "updater:install"
-    );
+    return electron.ipcRenderer.invoke("updater:install");
   },
-  /*
-   * -----------------------------------------------------
+  /* -----------------------------------------------------
    * UPDATE AVAILABLE
-   * -----------------------------------------------------
-   */
+   * ----------------------------------------------------- */
   onUpdateAvailable: (callback) => {
     const listener = (_event, data) => {
       callback(data);
     };
-    electron.ipcRenderer.on(
-      "updater:update-available",
-      listener
-    );
+    electron.ipcRenderer.on("updater:update-available", listener);
     return () => {
-      electron.ipcRenderer.removeListener(
-        "updater:update-available",
-        listener
-      );
+      electron.ipcRenderer.removeListener("updater:update-available", listener);
     };
   },
-  /*
-   * -----------------------------------------------------
+  /* -----------------------------------------------------
    * NO UPDATE
-   * -----------------------------------------------------
-   */
+   * ----------------------------------------------------- */
   onUpdateNotAvailable: (callback) => {
     const listener = (_event, data) => {
       callback(data);
     };
-    electron.ipcRenderer.on(
-      "updater:update-not-available",
-      listener
-    );
+    electron.ipcRenderer.on("updater:update-not-available", listener);
     return () => {
-      electron.ipcRenderer.removeListener(
-        "updater:update-not-available",
-        listener
-      );
+      electron.ipcRenderer.removeListener("updater:update-not-available", listener);
     };
   },
-  /*
-   * -----------------------------------------------------
+  /* -----------------------------------------------------
    * DOWNLOAD PROGRESS
-   * -----------------------------------------------------
-   */
+   * ----------------------------------------------------- */
   onDownloadProgress: (callback) => {
     const listener = (_event, data) => {
       callback(data);
     };
-    electron.ipcRenderer.on(
-      "updater:download-progress",
-      listener
-    );
+    electron.ipcRenderer.on("updater:download-progress", listener);
     return () => {
-      electron.ipcRenderer.removeListener(
-        "updater:download-progress",
-        listener
-      );
+      electron.ipcRenderer.removeListener("updater:download-progress", listener);
     };
   },
-  /*
-   * -----------------------------------------------------
+  /* -----------------------------------------------------
    * UPDATE DOWNLOADED
-   * -----------------------------------------------------
-   */
+   * ----------------------------------------------------- */
   onUpdateDownloaded: (callback) => {
     const listener = (_event, data) => {
       callback(data);
     };
-    electron.ipcRenderer.on(
-      "updater:update-downloaded",
-      listener
-    );
+    electron.ipcRenderer.on("updater:update-downloaded", listener);
     return () => {
-      electron.ipcRenderer.removeListener(
-        "updater:update-downloaded",
-        listener
-      );
+      electron.ipcRenderer.removeListener("updater:update-downloaded", listener);
     };
   },
-  /*
-   * -----------------------------------------------------
+  /* -----------------------------------------------------
    * ERROR
-   * -----------------------------------------------------
-   */
+   * ----------------------------------------------------- */
   onUpdateError: (callback) => {
     const listener = (_event, data) => {
       callback(data);
     };
-    electron.ipcRenderer.on(
-      "updater:error",
-      listener
-    );
+    electron.ipcRenderer.on("updater:error", listener);
     return () => {
-      electron.ipcRenderer.removeListener(
-        "updater:error",
-        listener
-      );
+      electron.ipcRenderer.removeListener("updater:error", listener);
     };
   }
 };
-electron.contextBridge.exposeInMainWorld(
-  "electronUpdater",
-  updater
-);
+electron.contextBridge.exposeInMainWorld("electronUpdater", updater);
 const ipc = {
   on: (channel, callback) => {
     const listener = (_event, data) => {
@@ -151,9 +96,18 @@ const ipc = {
   },
   invoke: (channel, data) => {
     return electron.ipcRenderer.invoke(channel, data);
+  },
+  /* =====================================================
+       BILL PRINTING
+       ===================================================== */
+  getBillPrinters: () => {
+    return electron.ipcRenderer.invoke("bill-printing:get-printers");
+  },
+  printThermalBill: (data) => {
+    return electron.ipcRenderer.invoke("bill-printing:thermal-print", data);
+  },
+  printWindowsBill: (data) => {
+    return electron.ipcRenderer.invoke("bill-printing:windows-print", data);
   }
 };
-electron.contextBridge.exposeInMainWorld(
-  "ipcRenderer",
-  ipc
-);
+electron.contextBridge.exposeInMainWorld("ipcRenderer", ipc);

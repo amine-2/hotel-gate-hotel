@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { X, Camera, AlertCircle } from "lucide-react";
 import { Html5Qrcode } from "html5-qrcode";
 
-export default function QRScannerModal({ onScan, onClose }) {
+export default function QRScannerModal({ onScan, onClose, t }) {
   const scannerRef = useRef(null);
   const startedRef = useRef(false);
   const [error, setError] = useState("");
@@ -28,7 +28,7 @@ export default function QRScannerModal({ onScan, onClose }) {
         if (cancelled) return;
 
         if (!cameras || cameras.length === 0) {
-          throw new Error("No camera was found.");
+          throw new Error(t("noCameraFound"));
         }
 
         // Prefer the back camera.
@@ -65,7 +65,7 @@ export default function QRScannerModal({ onScan, onClose }) {
           setStarting(false);
         }
       } catch (err) {
-        console.error("Failed to start QR scanner:", err);
+        console.error(t("failedToStartQrScanner"), err);
 
         startedRef.current = false;
 
@@ -73,7 +73,7 @@ export default function QRScannerModal({ onScan, onClose }) {
           setStarting(false);
           setError(
             err?.message ||
-              "Unable to access the camera. Please check camera permissions."
+              t("unableToAccessCamera")
           );
         }
       }
@@ -94,13 +94,13 @@ export default function QRScannerModal({ onScan, onClose }) {
             await scanner.stop();
           }
         } catch (err) {
-          console.error("Failed to stop QR scanner:", err);
+          console.error(t("failedToStopQrScanner"), err);
         }
 
         try {
           scanner.clear();
         } catch (err) {
-          console.error("Failed to clear QR scanner:", err);
+          console.error(t("failedToClearQrScanner"), err);
         }
 
         scannerRef.current = null;
@@ -118,11 +118,11 @@ export default function QRScannerModal({ onScan, onClose }) {
         <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-5 dark:border-zinc-700">
           <div>
             <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              Scan Booking QR Code
+              {t("scanBookingQrCode")}
             </h2>
 
             <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-              Point the camera at the booking QR code
+               {t("pointCameraAtBookingQr")}
             </p>
           </div>
 
@@ -148,7 +148,7 @@ export default function QRScannerModal({ onScan, onClose }) {
                 <Camera size={32} className="mb-3" />
 
                 <p className="text-sm">
-                  Starting camera...
+                  {t("startingCamera")}
                 </p>
               </div>
             )}
@@ -163,7 +163,7 @@ export default function QRScannerModal({ onScan, onClose }) {
 
               <div>
                 <p className="font-medium">
-                  Camera unavailable
+                  {t("cameraUnavailable")}
                 </p>
 
                 <p className="mt-1">
@@ -175,7 +175,7 @@ export default function QRScannerModal({ onScan, onClose }) {
 
           {!error && (
             <p className="mt-4 text-center text-xs text-zinc-500 dark:text-zinc-400">
-              Make sure the QR code is clearly visible inside the frame.
+              {t("makeSureQrVisible")}
             </p>
           )}
         </div>

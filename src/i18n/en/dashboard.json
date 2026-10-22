@@ -14,5 +14,12 @@
   "hotel": "Hotel",
   "roomsOccupied": "Rooms Occupied",
   "available": "Available",
-  "rate": "Rate"
+  "rate": "Rate",
+   "totalRooms": "Total Rooms",
+  "occupiedRooms": "Occupied Rooms",
+  "availableRooms": "Available Rooms",
+  "expectedArrivalsToday": "Expected Arrivals Today",
+  "expectedDeparturesToday": "Expected Departures Today",
+  "currentGuests": "Current Guests",
+  "pendingReservations": "Pending Reservations"
 }

@@ -186,7 +186,7 @@ export default function HotelFacilitiesManager({ hotelId }) {
                   )}
 
                   <span className="text-sm">
-                    {facility.name}
+                    {facility.name?.en}
                   </span>
 
                   <button
@@ -248,7 +248,7 @@ export default function HotelFacilitiesManager({ hotelId }) {
                     )}
 
                     <span className="text-sm">
-                      {facility.name}
+                      {facility.name?.en}
                     </span>
 
                     {selected && (

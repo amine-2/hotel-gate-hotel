@@ -14,7 +14,6 @@ import {
 
 import { useHotel } from "../../auth/HotelContext";
 import { getReceptionistDashboardStats } from "../../lib/receptionist/getReceptionistDashboardStats";
-import { i } from "framer-motion/client";
 
 export default function ReceptionDashboard() {
   const { profile } = useAuth();
@@ -61,43 +60,43 @@ export default function ReceptionDashboard() {
   const summaryCards = [
     {
       key: "totalRooms",
-      label: "Total Rooms",
+      label: "totalRooms",
       value: stats.totalRooms,
       icon: BedDouble,
     },
     {
       key: "occupiedRooms",
-      label: "Occupied Rooms",
+      label: "occupiedRooms",
       value: stats.occupiedRooms,
       icon: DoorOpen,
     },
     {
       key: "availableRooms",
-      label: "Available Rooms",
+      label: "availableRooms",
       value: stats.availableRooms,
       icon: DoorOpen,
     },
     {
       key: "expectedArrivals",
-      label: "Expected Arrivals Today",
+      label: "expectedArrivalsToday",
       value: stats.expectedArrivals,
       icon: CalendarCheck,
     },
     {
       key: "expectedDepartures",
-      label: "Expected Departures Today",
+      label: "expectedDeparturesToday",
       value: stats.expectedDepartures,
       icon: CalendarClock,
     },
     {
       key: "currentGuests",
-      label: "Current Guests",
+      label: "currentGuests",
       value: stats.currentGuests,
       icon: Users,
     },
     {
       key: "pendingReservations",
-      label: "Pending Reservations",
+      label: "pendingReservations",
       value: stats.pendingReservations,
       icon: ClipboardList,
     },
@@ -121,7 +120,7 @@ export default function ReceptionDashboard() {
             transition hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
           >
             <Plus size={18} />
-            New Reservation
+            {t("newReservation")}
           </button>
         </div>
 
@@ -143,7 +142,7 @@ export default function ReceptionDashboard() {
                 <div className="flex items-start justify-between">
                   <div>
                     <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
-                      {card.label}
+                      {t(card.label)}
                     </p>
 
                     <p className="mt-3 text-3xl font-bold text-zinc-800 dark:text-zinc-100">

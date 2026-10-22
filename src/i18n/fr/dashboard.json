@@ -14,5 +14,13 @@
   "hotel": "Hôtel",
   "roomsOccupied": "Chambres occupées",
   "available": "Disponibles",
-  "rate": "Taux"
+  "rate": "Taux",
+  "totalRooms": "Total des chambres",
+  "occupiedRooms": "Chambres occupées",
+  "availableRooms": "Chambres disponibles",
+  "expectedArrivalsToday": "Arrivées prévues aujourd’hui",
+  "expectedDeparturesToday": "Départs prévus aujourd’hui",
+  "currentGuests": "Clients présents",
+  "pendingReservations": "Réservations en attente",
+  "newReservation": "Nouvelle réservation"
 }

@@ -5,6 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import { useHotel } from "../../auth/HotelContext";
+import { useTranslation } from "react-i18next";
 
 import ReservationGuestForm from "../../components/reception/reservations/ReservationGuestForm";
 import ReservationStayForm from "../../components/reception/reservations/ReservationStayForm";
@@ -15,6 +16,7 @@ import { createReservation } from "../../lib/receptionist/createReservation";
 export default function NewReservation() {
   const navigate = useNavigate();
   const { hotelId } = useHotel();
+  const { t } = useTranslation("reservation");
 
   const [form, setForm] = useState({
     name: "",
@@ -129,16 +131,17 @@ export default function NewReservation() {
           className="mb-6 flex items-center gap-2 text-sm font-medium text-zinc-500 transition hover:text-zinc-900 disabled:cursor-not-allowed disabled:opacity-50 dark:text-zinc-400 dark:hover:text-zinc-100"
         >
           <ArrowLeft size={18} />
-          Back to Reservations
+          {t("backToReservations")}
+          
         </button>
 
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-zinc-800 dark:text-zinc-200">
-            New Reservation
+            {t("newReservation")}
           </h1>
 
           <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-            Create an on-site reservation
+            {t("createOnSiteReservation")}
           </p>
         </div>
 
@@ -153,6 +156,7 @@ export default function NewReservation() {
             <ReservationGuestForm
               form={form}
               updateForm={updateForm}
+              t={t}
             />
 
             <ReservationStayForm

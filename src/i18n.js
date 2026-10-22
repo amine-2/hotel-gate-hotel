@@ -11,6 +11,7 @@ import enHotels from "./i18n/en/hotels.json";
 import enManagers from "./i18n/en/managers.json";
 import enDashboard from "./i18n/en/dashboard.json";
 import enCms from "./i18n/en/cms.json";
+import enReservation from "./i18n/en/reservation.json";
 
 
 import frCommon from "./i18n/fr/common.json";
@@ -22,6 +23,7 @@ import frHotels from "./i18n/fr/hotels.json";
 import frManagers from "./i18n/fr/managers.json";
 import frDashboard from "./i18n/fr/dashboard.json";
 import frCms from "./i18n/fr/cms.json";
+import frReservation from "./i18n/fr/reservation.json";
 
 i18n
   .use(initReactI18next)
@@ -36,7 +38,8 @@ i18n
         hotels: enHotels,
         managers: enManagers,
         dashboard: enDashboard,
-        cms: enCms
+        cms: enCms,
+        reservation: enReservation
       },
       fr: {
         common: frCommon,
@@ -47,14 +50,15 @@ i18n
         hotels: frHotels,
         managers: frManagers,
         dashboard: frDashboard,
-        cms: frCms
+        cms: frCms,
+        reservation: frReservation
       }
     },
 
     lng: "en", // default language
     fallbackLng: "en",
 
-    ns: ["common", "settings", "staff", "issues", "sidebar", "hotels", "managers", "dashboard", "cms"], // namespaces
+    ns: ["common", "settings", "staff", "issues", "sidebar", "hotels", "managers", "dashboard", "cms", "reservation"], // namespaces
     defaultNS: "common",
 
     interpolation: {

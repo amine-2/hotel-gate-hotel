@@ -29,7 +29,7 @@ export default function ReceptionLayout() {
       path: "/dashboard/reception/rooms",
     },
     {
-      label: "Stay history",
+      label: "stayHistory",
       icon: FileClock,
       path: "/dashboard/reception/stay-history",
     },

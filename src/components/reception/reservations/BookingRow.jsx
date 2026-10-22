@@ -1,6 +1,7 @@
 export default function BookingRow({
   booking,
   onClick,
+  t
 }) {
   const statusStyles = {
     confirmed:
@@ -56,7 +57,7 @@ export default function BookingRow({
             "bg-zinc-100 text-zinc-600"
           }`}
         >
-          {booking.status}
+          {t(booking.status)}
         </span>
       </td>
 

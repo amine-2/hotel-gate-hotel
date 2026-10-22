@@ -12,5 +12,9 @@
   "offers": "Offres",
   "reviews": "Avis",
   "analytics": "Analytiques",
-  "candidates": "Candidats"
+  "candidates": "Candidats",
+  "frontdesk": "Réception",
+  "rooms": "Chambres",
+  "stayHistory": "Historique des séjours",
+  "newReservation": "New Reservation"
 }

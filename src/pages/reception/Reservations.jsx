@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
 import { useHotel } from "../../auth/HotelContext";
+import { useTranslation } from "react-i18next";
 
 import ReservationSearch from "../../components/reception/reservations/ReservationSearch";
 import ReservationTabs from "../../components/reception/reservations/ReservationTabs";
@@ -13,6 +14,7 @@ import { getReservations } from "../../lib/receptionist/getReservations";
 export default function Reservations() {
   const navigate = useNavigate();
   const { hotelId } = useHotel();
+  const { t } = useTranslation("reservation");
 
   const [activeTab, setActiveTab] = useState("all");
   const [search, setSearch] = useState("");
@@ -63,11 +65,11 @@ export default function Reservations() {
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-zinc-800 dark:text-zinc-200">
-              Reservations
+              {t("reservations")}
             </h1>
 
             <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-              Manage hotel reservations
+              {t("manageHotelReservations")}
             </p>
           </div>
 
@@ -78,7 +80,7 @@ export default function Reservations() {
             className="flex items-center gap-2 rounded-xl bg-zinc-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
           >
             <Plus size={18} />
-            New Reservation
+            {t("newReservation")}
           </button>
         </div>
 
@@ -86,12 +88,14 @@ export default function Reservations() {
           search={search}
           setSearch={setSearch}
           onScanQR={() => setShowQRScanner(true)}
+          t={t}
          
         />
 
         <ReservationTabs
           activeTab={activeTab}
           setActiveTab={setActiveTab}
+          t={t}
         />
 
         {error && (
@@ -108,6 +112,7 @@ export default function Reservations() {
           <BookingTable
             bookings={bookings}
             onBookingClick={handleBookingClick}
+            t={t}
           />
         )}
       </div>
@@ -116,6 +121,7 @@ export default function Reservations() {
         <QRScannerModal
           onScan={handleQRScan}
           onClose={() => setShowQRScanner(false)}
+          t={t}
         />
       )}
     </div>

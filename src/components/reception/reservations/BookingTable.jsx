@@ -3,6 +3,7 @@ import BookingRow from "./BookingRow";
 export default function BookingTable({
   bookings,
   onBookingClick,
+  t
 }) {
   return (
     <div className="mt-6 overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900">
@@ -11,31 +12,31 @@ export default function BookingTable({
           <thead>
             <tr className="border-b border-zinc-200 bg-zinc-50 text-left dark:border-zinc-700 dark:bg-zinc-800/50">
               <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                Guest
+                {t("guest")}
               </th>
 
               <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                Room
+                {t("room")}
               </th>
 
               <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                Check-in
+                {t("checkIn")}
               </th>
 
               <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                Check-out
+                {t("checkOut")}
               </th>
 
               <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                Guests
+                {t("guests")}
               </th>
 
               <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                Status
+                {t("status")}
               </th>
 
               <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                Total
+                {t("total")}
               </th>
             </tr>
           </thead>
@@ -47,6 +48,7 @@ export default function BookingTable({
                   key={booking.id}
                   booking={booking}
                   onClick={() => onBookingClick(booking)}
+                  t={t}
                 />
               ))
             ) : (
@@ -55,7 +57,7 @@ export default function BookingTable({
                   colSpan="7"
                   className="px-6 py-12 text-center text-sm text-zinc-500"
                 >
-                  No reservations found.
+                  {t("noReservationsFound")}
                 </td>
               </tr>
             )}

@@ -1,25 +1,26 @@
 const tabs = [
   {
     key: "all",
-    label: "All",
+    label: "all",
   },
   {
     key: "pending",
-    label: "Pending",
+    label: "pending",
   },
   {
     key: "confirmed",
-    label: "Confirmed",
+    label: "confirmed",
   },
   {
     key: "cancelled",
-    label: "Cancelled",
+    label: "cancelled",
   },
 ];
 
 export default function ReservationTabs({
   activeTab,
   setActiveTab,
+  t
 }) {
   return (
     <div className="mt-6 border-b border-zinc-200 dark:border-zinc-700">
@@ -37,7 +38,7 @@ export default function ReservationTabs({
                   : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
               }`}
             >
-              {tab.label}
+              {t(tab.label)}
 
               {active && (
                 <span className="absolute bottom-0 left-0 h-0.5 w-full bg-zinc-900 dark:bg-zinc-100" />

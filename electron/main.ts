@@ -5,7 +5,6 @@ import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import fs from "node:fs";
-import net from "node:net";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -187,8 +186,7 @@ function createWindow() {
 
     win.webContents.openDevTools();
   } else {
-
-  /* =======================================================
+    /* =======================================================
      PRODUCTION
      ======================================================= */
     const indexPath = path.join(RENDERER_DIST, "index.html");
@@ -549,26 +547,26 @@ $data = [Convert]::FromBase64String($base64)
   try {
     log("[Thermal Print] Sending RAW ESC/POS job to Windows...");
 
-   await execFileAsync(
-  "powershell.exe",
-  [
-    "-NoProfile",
-    "-NonInteractive",
-    "-ExecutionPolicy",
-    "Bypass",
-    "-Command",
-    powershellScript,
-  ],
-  {
-    windowsHide: true,
-    maxBuffer: 1024 * 1024,
-    env: {
-      ...process.env,
-      HOTEL_GATES_PRINTER_NAME: printerName,
-      HOTEL_GATES_BILL_BASE64: base64Data,
-    },
-  }
-);
+    await execFileAsync(
+      "powershell.exe",
+      [
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        powershellScript,
+      ],
+      {
+        windowsHide: true,
+        maxBuffer: 1024 * 1024,
+        env: {
+          ...process.env,
+          HOTEL_GATES_PRINTER_NAME: printerName,
+          HOTEL_GATES_BILL_BASE64: base64Data,
+        },
+      },
+    );
     log("[Thermal Print] RAW ESC/POS job sent successfully.");
 
     return {
@@ -576,16 +574,12 @@ $data = [Convert]::FromBase64String($base64)
     };
   } catch (error: any) {
     log(
-        "[Thermal Print] ERROR:",
-        error?.message ||
-            error?.stderr ||
-            String(error)
+      "[Thermal Print] ERROR:",
+      error?.message || error?.stderr || String(error),
     );
 
     throw new Error(
-        error?.message ||
-            error?.stderr ||
-            "Thermal printing failed."
+      error?.message || error?.stderr || "Thermal printing failed.",
     );
     throw error;
   }
